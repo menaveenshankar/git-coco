@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import sys
 from os.path import dirname, abspath
 from os.path import join as join_path
@@ -59,7 +61,7 @@ class CommitMsg(object):
 
 def get_coauthor_initials():
     sys.stdin = open('/dev/tty', 'r')
-    coauthors = raw_input(
+    coauthors = input(
         "\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\texample input - ts, gs (for Tony Stark and Pt. Gangadhar Shastri)\n\t Open ../authors.lst to view the current list of authors for this project\n\n[INPUT]: Enter co-author(s) initials: ")
     return coauthors
 
