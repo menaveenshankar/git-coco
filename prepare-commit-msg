@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
 import sys
-from os.path import dirname, abspath
+from os.path import dirname, abspath, exists
 from os.path import join as join_path
+from time import sleep
 
 try:
     from git import Repo
@@ -17,7 +18,7 @@ class CommitMsg(object):
         self._repo_path = dirname(dirname(githooks_dir))
         self.repo = Repo(self._repo_path)
         self._authors_file = join_path(dirname(githooks_dir), 'authors.lst')
-        self._coauthors = coauthors.split(',')
+        self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
         self.no_coauthors = (self._coauthors[0] == '')
 
     def read_authors_file(self):
