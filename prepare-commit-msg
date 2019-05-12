@@ -1,5 +1,12 @@
 import sys
 
+try:
+     from git import Repo
+ except ImportError:
+     print('[FAILURE]: gitpython not installed. pip install gitpython')
+     exit(1)
+
+     
 if __name__ == '__main__':
     commit_msg_filepath = sys.argv[1]
     commit_type = sys.argv[2] if len(sys.argv) > 2 else ''
