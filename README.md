@@ -1,7 +1,8 @@
 # git_coauthors
 a simple git hook to add co-authors to commit message
 
-* _prepare-commit-msg_ should be copied to each of the respective git repos i.e. \<git repo\>/.git/hooks
+* _prepare-commit-msg_ should be copied to each of the respective git repos i.e. \<git repo\>/.git/hooks  
+  if its a submodule then it should be copied to \<git repo\>/.git/modules/\<module name\>/hooks
 * run chmod +x prepare-commit-msg
 * authors.lst should be in the parent directory of prepare-commit-msg hook. The authors should be in the following format:  
   \<initials\>: \<full name\>, \<email\>  
