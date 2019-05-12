@@ -1,16 +1,33 @@
 import sys
+from os.path import dirname, abspath
+from os.path import join as join_path
 
 try:
-     from git import Repo
- except ImportError:
-     print('[FAILURE]: gitpython not installed. pip install gitpython')
-     exit(1)
+    from git import Repo
+except ImportError:
+    print('[FAILURE]: gitpython not installed. pip install gitpython')
+    exit(1)
 
+
+class CommitMsg(object):
+    def __init__(self, coauthors):
+        githooks_dir = dirname(abspath(__file__))
+        self._repo_path = dirname(dirname(githooks_dir))
+        self.repo = Repo(self._repo_path)
+        self._authors_file = join_path(dirname(githooks_dir), 'authors.lst')
+        self._coauthors = coauthors.split(',')
+        self.no_coauthors = (self._coauthors[0] == '')
+
+    def get_coauthor_details(self):
+        contents = open(self._authors_file, 'r').readlines()
+        authors = [x.split(':') for x in contents]
+        return dict(authors)
 
 def get_coauthor_initials(commit_msg_filepath):
-     sys.stdin = open('/dev/tty','r')
-     coauthors = raw_input("\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\texample input - ts, bw (for Tony Stark and Bruce Wayne)\n\t Open ../authors.lst to view the current list of authors for this project\n\n[INPUT]: Enter co-author(s) initials: ")
-     return coauthors
+    sys.stdin = open('/dev/tty', 'r')
+    coauthors = raw_input(
+        "\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\texample input - ts, gs (for Tony Stark and Pt. Gangadhar Shastri)\n\t Open ../authors.lst to view the current list of authors for this project\n\n[INPUT]: Enter co-author(s) initials: ")
+    return coauthors
 
 
 if __name__ == '__main__':
@@ -18,7 +35,7 @@ if __name__ == '__main__':
     commit_type = sys.argv[2] if len(sys.argv) > 2 else ''
 
     # execute only for message commit type. For amend, merge, squash simply exit
-    if commit_type not in  ['', 'message']:
+    if commit_type not in ['', 'message']:
         sys.exit(0)
 
     coauthors = get_coauthor_initials(commit_msg_filepath)
