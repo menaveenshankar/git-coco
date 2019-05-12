@@ -28,14 +28,20 @@ class CommitMsg(object):
             print('authors.lst not found, check README!')
             sys.exit(1)
 
-    def get_coauthor_details(self):
-        contents = open(self._authors_file, 'r').readlines()
-        authors = [x.split(':') for x in contents]
-        return dict(authors)
+    def prune_incorrect_coauthor_initials(self, author_initials):
+        authorlst = set(author_initials.keys())
+        commit_authors = set(self._coauthors)
+        correct_coauthors = authorlst.intersection(commit_authors)
+        incorrect_coauthors = commit_authors.difference(authorlst)
+        if incorrect_coauthors:
+            print("These initials are incorrect {}. \n Please check and add them manually".format(list(incorrect_coauthors)))
+            sleep(2)
+        return correct_coauthors
 
     def get_coauthor_name_email(self):
-        coauth_info = self.get_coauthor_details()
-        return [coauth_info[x.strip().upper()].split(',') for x in self._coauthors]
+        coauth_info = self.read_authors_file()
+        actual_coauthors = self.prune_incorrect_coauthor_initials(coauth_info)
+        return [coauth_info[x.strip().upper()].split(',') for x in actual_coauthors]
 
     @property
     def co_authors(self):
