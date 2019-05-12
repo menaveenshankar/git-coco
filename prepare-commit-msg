@@ -1,0 +1,10 @@
+import sys
+
+if __name__ == '__main__':
+    commit_msg_filepath = sys.argv[1]
+    commit_type = sys.argv[2] if len(sys.argv) > 2 else ''
+
+    # execute only for message commit type. For amend, merge, squash simply exit
+    if commit_type not in  ['', 'message']:
+        sys.exit(0)
+
