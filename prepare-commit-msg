@@ -6,7 +6,13 @@ try:
      print('[FAILURE]: gitpython not installed. pip install gitpython')
      exit(1)
 
-     
+
+def get_coauthor_initials(commit_msg_filepath):
+     sys.stdin = open('/dev/tty','r')
+     coauthors = raw_input("\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\texample input - ts, bw (for Tony Stark and Bruce Wayne)\n\t Open ../authors.lst to view the current list of authors for this project\n\n[INPUT]: Enter co-author(s) initials: ")
+     return coauthors
+
+
 if __name__ == '__main__':
     commit_msg_filepath = sys.argv[1]
     commit_type = sys.argv[2] if len(sys.argv) > 2 else ''
@@ -15,3 +21,4 @@ if __name__ == '__main__':
     if commit_type not in  ['', 'message']:
         sys.exit(0)
 
+    coauthors = get_coauthor_initials(commit_msg_filepath)
