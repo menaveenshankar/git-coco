@@ -18,6 +18,16 @@ class CommitMsg(object):
         self._coauthors = coauthors.split(',')
         self.no_coauthors = (self._coauthors[0] == '')
 
+    def read_authors_file(self):
+        try:
+            if not exists(self._authors_file):  raise IOError
+            contents = open(self._authors_file, 'r').readlines()
+            authors = [x.split(':') for x in contents]
+            return dict(authors)
+        except IOError:
+            print('authors.lst not found, check README!')
+            sys.exit(1)
+
     def get_coauthor_details(self):
         contents = open(self._authors_file, 'r').readlines()
         authors = [x.split(':') for x in contents]
@@ -40,11 +50,34 @@ class CommitMsg(object):
             # git expects co-authors after two blank lines
             return '\n\n' + '\n'.join(coauths_str) + '\n\n'
 
-def get_coauthor_initials(commit_msg_filepath):
+
+def get_coauthor_initials():
     sys.stdin = open('/dev/tty', 'r')
     coauthors = raw_input(
         "\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\texample input - ts, gs (for Tony Stark and Pt. Gangadhar Shastri)\n\t Open ../authors.lst to view the current list of authors for this project\n\n[INPUT]: Enter co-author(s) initials: ")
     return coauthors
+
+
+def prepare_message(commit_msg_filepath, auths):
+    """
+    prepares the message in the format:
+
+    commit summary
+
+    <empty body>
+
+
+    Co-authored-by: A B <A.B@company.domain>
+
+    # comments
+    """
+    commit_msg = CommitMsg(auths)
+
+    with open(commit_msg_filepath, 'r+') as f:
+        msg = f.readlines()
+        f.seek(0, 0)
+        # first line of variable msg is already filled if git commit -m "<msg>" is executed
+        f.write("{}{}{}".format(msg[0], commit_msg.co_authors, ''.join(msg[1:])))
 
 
 if __name__ == '__main__':
@@ -55,4 +88,5 @@ if __name__ == '__main__':
     if commit_type not in ['', 'message']:
         sys.exit(0)
 
-    coauthors = get_coauthor_initials(commit_msg_filepath)
+    coauthors = get_coauthor_initials()
+    prepare_message(commit_msg_filepath, coauthors)
