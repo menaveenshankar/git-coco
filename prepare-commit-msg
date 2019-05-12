@@ -23,6 +23,23 @@ class CommitMsg(object):
         authors = [x.split(':') for x in contents]
         return dict(authors)
 
+    def get_coauthor_name_email(self):
+        coauth_info = self.get_coauthor_details()
+        return [coauth_info[x.strip().upper()].split(',') for x in self._coauthors]
+
+    @property
+    def co_authors(self):
+        if self.no_coauthors:
+            return '\n'
+        else:
+            prefix_str = 'Co-authored-by: {}'
+            _coauth_fmt = lambda x: x[0].strip() + ' <' + x[1].strip() + '@superhero.universe>'
+
+            coauths_lst = self.get_coauthor_name_email()
+            coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
+            # git expects co-authors after two blank lines
+            return '\n\n' + '\n'.join(coauths_str) + '\n\n'
+
 def get_coauthor_initials(commit_msg_filepath):
     sys.stdin = open('/dev/tty', 'r')
     coauthors = raw_input(
