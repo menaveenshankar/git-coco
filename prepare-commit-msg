@@ -18,7 +18,7 @@ class CommitMsg(object):
     def __init__(self, coauthors):
         githooks_dir = dirname(abspath(__file__))
         self.repo = Repo(CommitMsg.hook_git_path(githooks_dir))
-        self._authors_file = join_path(dirname(githooks_dir), 'authors.lst')
+        self._authors_file = join_path(dirname(githooks_dir), 'authors.txt')
         self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
         self.no_coauthors = (self._coauthors[0] == '')
         self.issue_number = self.parse_issue_number_from_branch()
@@ -56,7 +56,7 @@ class CommitMsg(object):
             authors = [x.split(':') for x in contents]
             return dict(authors)
         except IOError:
-            print('authors.lst not found, check README!')
+            print('authors.txt not found, check README!')
             sys.exit(1)
 
     def prune_incorrect_coauthor_initials(self, author_initials):
@@ -92,7 +92,10 @@ class CommitMsg(object):
 def input_coauthor_initials():
     sys.stdin = open('/dev/tty', 'r')
     coauthors = input(
-        "\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\texample input - ts, gs (for Tony Stark and Pt. Gangadhar Shastri)\n\t Open ../authors.lst to view the current list of authors for this project\n\n[INPUT]: Enter co-author(s) initials: ")
+        """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\t
+        example input - ts, ck (for Tony Stark and Clark Kent )\n\t
+        Open ../authors.txt to view the current list of authors for this project\n\n
+        [INPUT]: Enter co-author(s) initials: """)
     return coauthors
 
 
