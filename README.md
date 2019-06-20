@@ -1,5 +1,5 @@
 # git_coauthors
-a simple git hook to add co-authors to commit message
+a simple git hook to add co-authors to commit message. It gets triggered automatically as soon as you hit enter ```git commit```
 
 * _prepare-commit-msg_ should be copied to each of the respective git repos i.e. \<git repo\>/.git/hooks  
   if its a submodule then it should be copied to \<git repo\>/.git/modules/\<module name\>/hooks
