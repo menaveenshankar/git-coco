@@ -7,6 +7,9 @@ a simple git hook to add co-authors to commit message
 * authors.txt should be in the parent directory of prepare-commit-msg hook. It should not have any empty lines. The authors should be in the following format:  
   \<initials\>: \<full name\>, \<email\>  
   a common domain is assumed. This can be configured in the script.
+  
+**NOTE** - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
+```git commit --amend --no-edit```
  
 ## configs
 The following variables in the script should be configured by the user:
