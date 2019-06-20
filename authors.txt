@@ -1,2 +1,6 @@
 TS: Tony Stark, ironman
+CK: Clark Kent, superman
+DZ: Diana Zeus, wonder-woman
+CD: Carol Danvers, captain-marvel
+BW: Bruce Wayne, batman
 GS: Pt. Gangadhar V.M.O. Shastri, shaktimaan
