@@ -75,7 +75,7 @@ class CommitMsg(object):
         correct_coauthors = authorlst.intersection(commit_authors)
         incorrect_coauthors = commit_authors.difference(authorlst)
         if incorrect_coauthors:
-            print("[INFO]: These initials are incorrect {}. \n Please check and add them manually".format(
+            print("[INFO]: These initials are incorrect {}. \n Please check and add them manually\n".format(
                 list(incorrect_coauthors)))
             sleep(2)
         return correct_coauthors
@@ -102,10 +102,10 @@ class CommitMsg(object):
 def input_coauthor_initials():
     sys.stdin = open('/dev/tty', 'r')
     coauthors = input(
-        """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.\n\t
-        example input - ts, ck (for Tony Stark and Clark Kent )\n\t
-        Open ../authors.txt to view the current list of authors for this project\n\n
-        [INPUT]: Enter co-author(s) initials: """)
+        """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
+        example input - ts, ck (for Tony Stark and Clark Kent )
+        Open ../authors.txt to view the current list of authors for this project.
+        \n[INPUT]: Enter co-author(s) initials: """)
     return coauthors
 
 
