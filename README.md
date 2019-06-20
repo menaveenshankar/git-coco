@@ -10,7 +10,13 @@ a simple git hook to add co-authors to commit message
   
 **NOTE** - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
 ```git commit --amend --no-edit```
- 
+
+## Issue number (additional feature)
+If you are using frameworks like jira or codebeamer for tracking tasks, then you can also add the corresponding task/issue number
+to the commit message. This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number. However, if your branch name does not contain the issue number then you will be prompted to enter it manually. Check the screenshots for an overview.
+
+**NOTE** Coauthors and issue number are optional and the committer can simply hit enter to ignore them.
+
 ## configs
 The following variables in the script should be configured by the user:
 * **domain** - the domain of your organization. e.g. gmail.com
