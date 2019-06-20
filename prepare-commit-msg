@@ -13,6 +13,7 @@ except ImportError:
 
 domain = 'superhero.universe'
 issue_url_base = 'https://superhero-jira.net/'
+use_issue_in_msg = True
 
 
 class CommitMsg(object):
@@ -22,7 +23,7 @@ class CommitMsg(object):
         self._authors_file = join_path(dirname(githooks_dir), 'authors.txt')
         self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
         self.no_coauthors = (self._coauthors[0] == '')
-        self._issue_number = self.parse_issue_number_from_branch()
+        self._issue_number = self.parse_issue_number_from_branch() if use_issue_in_msg else ""
 
     @staticmethod
     def hook_git_path(hookdir_path):
