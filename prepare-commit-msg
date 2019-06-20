@@ -21,6 +21,7 @@ class CommitMsg(object):
         self._authors_file = join_path(dirname(githooks_dir), 'authors.lst')
         self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
         self.no_coauthors = (self._coauthors[0] == '')
+        self.issue_number = self.parse_issue_number_from_branch()
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -32,6 +33,21 @@ class CommitMsg(object):
             submodule_name = split_path_git[1].split('/')
             base_path = join_path(base_path, submodule_name[-2])
         return base_path
+
+    def parse_issue_number_from_branch(self):
+        if self.repo.head.is_detached:  return ''
+        issue_number = CommitMsg.is_issue_number_in_branch(self.repo.active_branch.name)
+        # if isse number is part of the branch name
+        if issue_number is None:
+            issue_number = str(input('[INPUT]: Enter issue number (optional): '))
+
+        return issue_number
+
+    @staticmethod
+    def is_issue_number_in_branch(active_branch):
+        # check if branch ends with "_issuexxxxx" where xxxxx is the issue number
+        issue_number = active_branch.lower().split('_')[-1]
+        return issue_number[2:] if 'issue' in issue_number else None
 
     def read_authors_file(self):
         try:
@@ -49,7 +65,8 @@ class CommitMsg(object):
         correct_coauthors = authorlst.intersection(commit_authors)
         incorrect_coauthors = commit_authors.difference(authorlst)
         if incorrect_coauthors:
-            print("These initials are incorrect {}. \n Please check and add them manually".format(list(incorrect_coauthors)))
+            print("These initials are incorrect {}. \n Please check and add them manually".format(
+                list(incorrect_coauthors)))
             sleep(2)
         return correct_coauthors
 
