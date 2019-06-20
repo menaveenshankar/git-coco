@@ -18,7 +18,7 @@ to the commit message. This can be done automatically if you name the branch end
 **NOTE** Coauthors and issue number are optional and the committer can simply hit enter to ignore them.
 
 ## configs
-The following variables in the script should be configured by the user:
+The following variables under ```config``` in the script should be configured by the user:
 * **domain** - the domain of your organization. e.g. gmail.com
 * **issue_url_base** - if you are using frameworks like jira or codebeamer for tracking tasks,
                        then you can set the base url. Only one issue number per commit is supported currently. However, more can be manually added by amending the commit.

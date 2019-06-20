@@ -11,9 +11,11 @@ except ImportError:
     print('[FAILURE]: gitpython not installed. pip install gitpython')
     exit(1)
 
-domain = 'superhero.universe'
-issue_url_base = 'https://superhero-jira.net/'
-use_issue_in_msg = True
+config = {
+    'domain': 'superhero.universe',
+    'issue_url_base': 'https://superhero-jira.net/',
+    'use_issue_in_msg': True
+}
 
 
 class CommitMsg(object):
@@ -23,7 +25,7 @@ class CommitMsg(object):
         self._authors_file = join_path(dirname(githooks_dir), 'authors.txt')
         self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
         self.no_coauthors = (self._coauthors[0] == '')
-        self._issue_number = self.parse_issue_number_from_branch() if use_issue_in_msg else ""
+        self._issue_number = self.parse_issue_number_from_branch() if config['use_issue_in_msg'] else ""
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -54,7 +56,7 @@ class CommitMsg(object):
     @property
     def issue_number(self):
         if self._issue_number:
-            issue_url = issue_url_base + self._issue_number
+            issue_url = config['issue_url_base'] + self._issue_number
             self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
 
         return self._issue_number
@@ -91,7 +93,7 @@ class CommitMsg(object):
             return '\n'
         else:
             prefix_str = 'Co-authored-by: {}'
-            _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), domain)
+            _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), config['domain'])
 
             coauths_lst = self.get_coauthor_name_email()
             coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
