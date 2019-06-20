@@ -12,6 +12,7 @@ except ImportError:
     exit(1)
 
 domain = 'superhero.universe'
+issue_url_base = 'https://superhero-jira.net/'
 
 
 class CommitMsg(object):
@@ -21,7 +22,7 @@ class CommitMsg(object):
         self._authors_file = join_path(dirname(githooks_dir), 'authors.txt')
         self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
         self.no_coauthors = (self._coauthors[0] == '')
-        self.issue_number = self.parse_issue_number_from_branch()
+        self._issue_number = self.parse_issue_number_from_branch()
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -49,6 +50,14 @@ class CommitMsg(object):
         issue_number = active_branch.lower().split('_')[-1]
         return issue_number[2:] if 'issue' in issue_number else None
 
+    @property
+    def issue_number(self):
+        if self._issue_number:
+            issue_url = issue_url_base + self._issue_number
+            self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
+
+        return self._issue_number
+
     def read_authors_file(self):
         try:
             if not exists(self._authors_file):  raise IOError
@@ -56,7 +65,7 @@ class CommitMsg(object):
             authors = [x.split(':') for x in contents]
             return dict(authors)
         except IOError:
-            print('authors.txt not found, check README!')
+            print('[ERROR]: authors.txt not found, check README!')
             sys.exit(1)
 
     def prune_incorrect_coauthor_initials(self, author_initials):
@@ -65,7 +74,7 @@ class CommitMsg(object):
         correct_coauthors = authorlst.intersection(commit_authors)
         incorrect_coauthors = commit_authors.difference(authorlst)
         if incorrect_coauthors:
-            print("These initials are incorrect {}. \n Please check and add them manually".format(
+            print("[INFO]: These initials are incorrect {}. \n Please check and add them manually".format(
                 list(incorrect_coauthors)))
             sleep(2)
         return correct_coauthors
@@ -105,7 +114,9 @@ def prepare_message(commit_msg_filepath, auths):
 
     commit summary
 
-    <empty body>
+    <optional body>
+    Issue: xxxxx
+    <issue_url>/xxxxx
 
 
     Co-authored-by: A B <A.B@company.domain>
@@ -118,7 +129,7 @@ def prepare_message(commit_msg_filepath, auths):
         msg = f.readlines()
         f.seek(0, 0)
         # first line of variable msg is already filled if git commit -m "<msg>" is executed
-        f.write("{}{}{}".format(msg[0], commit_msg.co_authors, ''.join(msg[1:])))
+        f.write("{}{}{}{}".format(msg[0], commit_msg.issue_number, commit_msg.co_authors, ''.join(msg[1:])))
 
 
 if __name__ == '__main__':
