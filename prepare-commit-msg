@@ -89,16 +89,6 @@ class CommitMsg(object):
 
         return self._issue_number
 
-    def read_authors_file(self):
-        try:
-            if not exists(self._authors_file):  raise IOError
-            contents = open(self._authors_file, 'r').readlines()
-            authors = [x.split(':') for x in contents]
-            return dict(authors)
-        except IOError:
-            print('[ERROR]: authors.txt not found, check README!')
-            sys.exit(1)
-
     def prune_incorrect_coauthor_initials(self, author_initials):
         authorlst = set(author_initials.keys())
         commit_authors = set(self._coauthors)
@@ -111,9 +101,8 @@ class CommitMsg(object):
         return correct_coauthors
 
     def get_coauthor_name_email(self):
-        coauth_info = self.read_authors_file()
-        actual_coauthors = self.prune_incorrect_coauthor_initials(coauth_info)
-        return [coauth_info[x.strip().upper()].split(',') for x in actual_coauthors]
+        actual_coauthors = self.prune_incorrect_coauthor_initials(self.authors_dict)
+        return [self.authors_dict[x.strip().upper()].split(',') for x in actual_coauthors]
 
     @property
     def co_authors(self):
