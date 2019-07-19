@@ -4,6 +4,9 @@ import sys
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
 from time import sleep
+from prompt_toolkit import prompt
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+from prompt_toolkit.contrib.completers import WordCompleter
 
 try:
     from git import Repo
@@ -16,6 +19,31 @@ config = {
     'issue_url_base': 'https://superhero-jira.net/',
     'use_issue_in_msg': True
 }
+
+
+class AuthorPrompter(object):
+    def __init__(self, authors_file):
+        self.authors_dict = self.read_authors_file(authors_file)
+        first_name_dict = self.map_first_name_to_details(self.authors_dict)
+        self.authors_dict.update(first_name_dict)
+        self.suggestions = self.populate_prompter()
+
+    def read_authors_file(self, authors_file):
+        try:
+            if not exists(authors_file):  raise IOError
+            contents = open(authors_file, 'r').readlines()
+            authors = [x.split(':') for x in contents]
+            return dict(authors)
+        except IOError:
+            print('[ERROR]: AP authors.txt not found, check README!')
+            sys.exit(1)
+
+    def map_first_name_to_details(self, authors_dict):
+        first_names = [v.split(' ')[1].upper() for v in authors_dict.values()]
+        return dict(zip(first_names, authors_dict.values()))
+
+    def populate_prompter(self):
+        return WordCompleter(self.authors_dict.keys(), ignore_case=True)
 
 
 class CommitMsg(object):
@@ -104,10 +132,10 @@ class CommitMsg(object):
 def input_coauthor_initials():
     sys.stdin = open('/dev/tty', 'r')
     coauthors = input(
-        """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
-        example input - ts, ck (for Tony Stark and Clark Kent )
-        Open ../authors.txt to view the current list of authors for this project.
-        \n[INPUT]: Enter co-author(s) initials: """)
+       """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
+       example input - ts, ck (for Tony Stark and Clark Kent )
+       Open ../authors.txt to view the current list of authors for this project.
+       \n[INPUT]: Enter co-author(s) initials: """)
     return coauthors
 
 
