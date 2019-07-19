@@ -47,10 +47,10 @@ class AuthorPrompter(object):
 
 
 class CommitMsg(object):
-    def __init__(self, coauthors):
+    def __init__(self, authors_dict, coauthors):
         githooks_dir = dirname(abspath(__file__))
         self.repo = Repo(CommitMsg.hook_git_path(githooks_dir))
-        self._authors_file = join_path(dirname(githooks_dir), 'authors.txt')
+        self.authors_dict = authors_dict
         self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
         self.no_coauthors = (self._coauthors[0] == '')
         self._issue_number = self.parse_issue_number_from_branch() if config['use_issue_in_msg'] else ""
@@ -144,7 +144,7 @@ def input_coauthor_initials(author_prompter):
     return coauthors
 
 
-def prepare_message(commit_msg_filepath, auths):
+def prepare_message(commit_msg_filepath, authors_dict, auths):
     """
     prepares the message in the format:
 
@@ -159,7 +159,7 @@ def prepare_message(commit_msg_filepath, auths):
 
     # comments
     """
-    commit_msg = CommitMsg(auths)
+    commit_msg = CommitMsg(authors_dict, auths)
 
     with open(commit_msg_filepath, 'r+') as f:
         msg = f.readlines()
@@ -178,4 +178,4 @@ if __name__ == '__main__':
 
     author_prompter = AuthorPrompter('../authors.txt')
     coauthors = input_coauthor_initials(author_prompter.suggestions)
-    prepare_message(commit_msg_filepath, coauthors)
+    prepare_message(commit_msg_filepath, author_prompter.authors_dict, coauthors)
