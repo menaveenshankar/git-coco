@@ -129,13 +129,18 @@ class CommitMsg(object):
             return '\n\n' + '\n'.join(coauths_str) + '\n\n'
 
 
-def input_coauthor_initials():
-    sys.stdin = open('/dev/tty', 'r')
-    coauthors = input(
-       """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
-       example input - ts, ck (for Tony Stark and Clark Kent )
-       Open ../authors.txt to view the current list of authors for this project.
-       \n[INPUT]: Enter co-author(s) initials: """)
+def input_coauthor_initials(author_prompter):
+    print(
+        """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or first names. 
+        Auto-suggest feature lists the authors in the database (indexed by both initials and first name), and 
+        auto-complete can be used with TAB.
+        example input - ts, ck (for Tony Stark and Clark Kent )
+        Open ../authors.txt to view the current list of authors for this project.
+        \n[INPUT]: Enter co-author(s) initials: """)
+    coauthors = prompt('[INPUT]: co-author(s) -',
+                       auto_suggest=AutoSuggestFromHistory(),
+                       completer=author_prompter, complete_while_typing=True
+                       )
     return coauthors
 
 
@@ -172,5 +177,5 @@ if __name__ == '__main__':
         sys.exit(0)
 
     author_prompter = AuthorPrompter('../authors.txt')
-    coauthors = input_coauthor_initials()
+    coauthors = input_coauthor_initials(author_prompter.suggestions)
     prepare_message(commit_msg_filepath, coauthors)
