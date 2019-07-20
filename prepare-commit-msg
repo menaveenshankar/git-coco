@@ -21,6 +21,7 @@ config = {
     'use_issue_in_msg': True
 }
 
+author_suggestions = {}
 
 class AuthorPrompter(object):
     def __init__(self, authors_file):
@@ -122,6 +123,8 @@ class CommitMsg(object):
 
 
 def input_coauthor_initials(author_prompter):
+    global author_suggestions
+    author_suggestions = author_prompter.authors_dict
     print(
         """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or first names. 
         Auto-suggest feature lists the authors in the database (indexed by both initials and first name), and 
@@ -169,5 +172,5 @@ if __name__ == '__main__':
         sys.exit(0)
 
     author_prompter = AuthorPrompter(config['relative_path_authors_file'])
-    coauthors = input_coauthor_initials(author_prompter.suggestions)
+    coauthors = input_coauthor_initials(author_prompter)
     prepare_message(commit_msg_filepath, author_prompter.authors_dict, coauthors)
