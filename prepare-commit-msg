@@ -21,8 +21,6 @@ config = {
     'use_issue_in_msg': True
 }
 
-author_suggestions = {}
-
 
 class AuthorValidator(Validator):
     def __init__(self, author_suggestions):
