@@ -6,7 +6,7 @@ from os.path import join as join_path
 from time import sleep
 from prompt_toolkit import prompt
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from prompt_toolkit.contrib.completers import WordCompleter
+from prompt_toolkit.completion import WordCompleter
 
 try:
     from git import Repo
@@ -44,7 +44,9 @@ class AuthorPrompter(object):
         return dict(zip(first_names, authors_dict.values()))
 
     def populate_prompter(self):
-        return WordCompleter(self.authors_dict.keys(), ignore_case=True)
+        full_author_names = [v.split(',')[0] for v in self.authors_dict.values()]
+        meta_dict = dict(zip(self.authors_dict.keys(), full_author_names))
+        return WordCompleter(self.authors_dict.keys(), ignore_case=True, match_middle=True, meta_dict=meta_dict)
 
 
 class CommitMsg(object):
