@@ -25,6 +25,9 @@ author_suggestions = {}
 
 
 class AuthorValidator(Validator):
+    def __init__(self, author_suggestions):
+        self.author_suggestions = author_suggestions
+
     def validate(self, document):
         authors = [x.strip().upper() for x in document.text.split(',')]
         valid_authors = author_suggestions.keys()
@@ -126,8 +129,7 @@ class CommitMsg(object):
 
 
 def input_coauthor_initials(author_prompter):
-    global author_suggestions
-    author_suggestions = author_prompter.authors_dict
+    author_validator = AuthorValidator(author_prompter.authors_dict)
     print(
         """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or first names. 
         Auto-suggest feature lists the authors in the database (indexed by both initials and first name), and 
@@ -138,7 +140,7 @@ def input_coauthor_initials(author_prompter):
     coauthors = prompt('[INPUT]: Enter co-author(s) -',
                        auto_suggest=AutoSuggestFromHistory(),
                        completer=author_prompter, complete_while_typing=True,
-                       validator=AuthorValidator(), validate_while_typing=False
+                       validator=author_validator, validate_while_typing=False
                        )
     return coauthors
 
