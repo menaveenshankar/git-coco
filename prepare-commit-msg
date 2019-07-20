@@ -3,7 +3,6 @@
 import sys
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
-from time import sleep
 from prompt_toolkit import prompt
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import WordCompleter
@@ -66,8 +65,8 @@ class CommitMsg(object):
         githooks_dir = dirname(abspath(__file__))
         self.repo = Repo(CommitMsg.hook_git_path(githooks_dir))
         self.authors_dict = authors_dict
-        self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
-        self.no_coauthors = (self._coauthors[0] == '')
+        self._coauthors = CommitMsg.valid_coauthors(coauthors)
+        self.no_coauthors = not self._coauthors
         self._issue_number = self.parse_issue_number_from_branch() if config['use_issue_in_msg'] else ""
 
     @staticmethod
@@ -103,6 +102,11 @@ class CommitMsg(object):
             self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
 
         return self._issue_number
+
+    @staticmethod
+    def valid_coauthors(coauthors):
+        valid_coauths = [x.strip().upper() for x in coauthors.split(',')]
+        return list(filter(lambda x: x != '', valid_coauths))
 
     def get_coauthor_name_email(self):
         return [self.authors_dict[x.strip().upper()].split(',') for x in self._coauthors]
