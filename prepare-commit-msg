@@ -15,6 +15,7 @@ except ImportError:
     exit(1)
 
 config = {
+    'relative_path_authors_file': '../authors.txt',
     'domain': 'superhero.universe',
     'issue_url_base': 'https://superhero-jira.net/',
     'use_issue_in_msg': True
@@ -35,7 +36,7 @@ class AuthorPrompter(object):
             authors = [x.split(':') for x in contents]
             return dict(authors)
         except IOError:
-            print('[ERROR]: AP authors.txt not found, check README!')
+            print('[ERROR]: authors.txt not found, check README!')
             sys.exit(1)
 
     def map_first_name_to_details(self, authors_dict):
@@ -165,6 +166,6 @@ if __name__ == '__main__':
     if commit_type not in ['', 'message']:
         sys.exit(0)
 
-    author_prompter = AuthorPrompter('../authors.txt')
+    author_prompter = AuthorPrompter(config['relative_path_authors_file'])
     coauthors = input_coauthor_initials(author_prompter.suggestions)
     prepare_message(commit_msg_filepath, author_prompter.authors_dict, coauthors)
