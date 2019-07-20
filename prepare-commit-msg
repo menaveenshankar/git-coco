@@ -7,6 +7,7 @@ from time import sleep
 from prompt_toolkit import prompt
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.validation import Validator, ValidationError
 
 try:
     from git import Repo
@@ -22,6 +23,16 @@ config = {
 }
 
 author_suggestions = {}
+
+
+class AuthorValidator(Validator):
+    def validate(self, document):
+        authors = [x.strip().upper() for x in document.text.split(',')]
+        valid_authors = author_suggestions.keys()
+        invalid_authors = list(filter(lambda x: x not in valid_authors, authors))
+        if invalid_authors and invalid_authors[0] != '':
+            raise ValidationError(message='[ERROR]: Invalid authors - {}'.format(invalid_authors))
+
 
 class AuthorPrompter(object):
     def __init__(self, authors_file):
@@ -93,20 +104,8 @@ class CommitMsg(object):
 
         return self._issue_number
 
-    def prune_incorrect_coauthor_initials(self, author_initials):
-        authorlst = set(author_initials.keys())
-        commit_authors = set(self._coauthors)
-        correct_coauthors = authorlst.intersection(commit_authors)
-        incorrect_coauthors = commit_authors.difference(authorlst)
-        if incorrect_coauthors:
-            print("[INFO]: These initials are incorrect {}. \n Please check and add them manually\n".format(
-                list(incorrect_coauthors)))
-            sleep(2)
-        return correct_coauthors
-
     def get_coauthor_name_email(self):
-        actual_coauthors = self.prune_incorrect_coauthor_initials(self.authors_dict)
-        return [self.authors_dict[x.strip().upper()].split(',') for x in actual_coauthors]
+        return [self.authors_dict[x.strip().upper()].split(',') for x in self._coauthors]
 
     @property
     def co_authors(self):
@@ -134,7 +133,8 @@ def input_coauthor_initials(author_prompter):
         Open ../authors.txt to view the current list of authors for this project.\n""")
     coauthors = prompt('[INPUT]: Enter co-author(s) -',
                        auto_suggest=AutoSuggestFromHistory(),
-                       completer=author_prompter, complete_while_typing=True
+                       completer=author_prompter, complete_while_typing=True,
+                       validator=AuthorValidator(), validate_while_typing=False
                        )
     return coauthors
 
