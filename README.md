@@ -26,6 +26,9 @@ to the commit message. This can be done automatically if you name the branch end
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
+* **relative_path_authors_file** - ```authors.txt``` usually is project specific and should reside in the parent directory
+                                   of hooks. However, if several projects share the author list then this path can be
+                                   accordingly adjusted.
 * **domain** - the domain of your organization. e.g. gmail.com
 * **issue_url_base** - if you are using frameworks like jira or codebeamer for tracking tasks,
                        then you can set the base url. Only one issue number per commit is supported currently. However, more can be manually added by amending the commit.
