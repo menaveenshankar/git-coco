@@ -122,11 +122,11 @@ def input_coauthor_initials(author_prompter):
     print(
         """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or first names. 
         Auto-suggest feature lists the authors in the database (indexed by both initials and first name), and 
-        auto-complete can be used with TAB.
-        example input - ts, ck (for Tony Stark and Clark Kent )
-        Open ../authors.txt to view the current list of authors for this project.
-        \n[INPUT]: Enter co-author(s) initials: """)
-    coauthors = prompt('[INPUT]: co-author(s) -',
+        auto-complete can be used with TAB. Hit ENTER only when you are done adding the coauthors, for selecting the
+        co-author use TAB or arrow keys (instead of ENTER).
+        example input - TS, CLARK(for Tony Stark and Clark Kent )
+        Open ../authors.txt to view the current list of authors for this project.\n""")
+    coauthors = prompt('[INPUT]: Enter co-author(s) -',
                        auto_suggest=AutoSuggestFromHistory(),
                        completer=author_prompter, complete_while_typing=True
                        )
