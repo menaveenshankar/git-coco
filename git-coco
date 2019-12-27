@@ -103,5 +103,8 @@ def get_commit_coauthors(coauthors_tmp_filepath):
 
 if __name__ == '__main__':
     gitcommit_args = ''.join(sys.argv[1:])
-    get_commit_coauthors(config['coauthors_git_msg'])
+    if sys.version_info >= (3, 6):
+        get_commit_coauthors(config['coauthors_git_msg'])
+    else:
+        print('[INFO]: Friendly version of the hook runs on >= python3.6. Falling back to the (old) geeky version')
     subprocess.call(['git', 'commit', gitcommit_args])
