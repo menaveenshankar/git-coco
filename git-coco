@@ -1,0 +1,78 @@
+#!/usr/bin/python3
+
+import sys, os
+from os.path import dirname, abspath, exists
+from os.path import join as join_path
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.validation import Validator, ValidationError
+
+try:
+    from git import Repo
+except ImportError:
+    print('[FAILURE]: gitpython not installed. pip install gitpython')
+    exit(1)
+
+config = {
+    'path_authors_file': join_path(dirname(__file__), 'authors.txt'),
+}
+
+
+class AuthorValidator(Validator):
+    def __init__(self, author_suggestions):
+        self.author_suggestions = author_suggestions
+
+    def validate(self, document):
+        authors = [x.strip().upper() for x in document.text.split(',')]
+        valid_authors = self.author_suggestions.keys()
+        invalid_authors = list(filter(lambda x: x not in valid_authors, authors))
+        if invalid_authors and invalid_authors[0] != '':
+            raise ValidationError(message='[ERROR]: Invalid authors - {}'.format(invalid_authors))
+
+
+class AuthorPrompter(object):
+    def __init__(self, authors_file):
+        self.authors_dict = self.read_authors_file(authors_file)
+        first_name_dict = self.map_first_name_to_details(self.authors_dict)
+        self.authors_dict.update(first_name_dict)
+        print(self.authors_dict)
+        self.suggestions = self.populate_prompter()
+
+    def read_authors_file(self, authors_file):
+        try:
+            if not exists(authors_file):  raise IOError
+            contents = open(authors_file, 'r').readlines()
+            authors = [x.split(':') for x in contents]
+            return dict(authors)
+        except IOError:
+            print('[ERROR]: authors.txt not found, check README!')
+            sys.exit(1)
+
+    def map_first_name_to_details(self, authors_dict):
+        first_names = [v.split(' ')[1].upper() for v in authors_dict.values()]
+        return dict(zip(first_names, authors_dict.values()))
+
+    def populate_prompter(self):
+        full_author_names = [v.split(',')[0] for v in self.authors_dict.values()]
+        meta_dict = dict(zip(self.authors_dict.keys(), full_author_names))
+        return WordCompleter(self.authors_dict.keys(), ignore_case=True, match_middle=True, meta_dict=meta_dict)
+
+
+def get_commit_coauthors(coauthors_tmp_filepath):
+    author_prompter = AuthorPrompter(config['path_authors_file'])
+    author_validator = AuthorValidator(author_prompter.authors_dict)
+    print(
+        """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or first names. 
+        Auto-suggest feature lists the authors in the database (indexed by both initials and first name), and 
+        auto-complete can be used with TAB. Hit ENTER only when you are done adding the coauthors, for selecting the
+        co-author use TAB or arrow keys (instead of ENTER).
+        example input - TS, CLARK(for Tony Stark and Clark Kent )
+        Open ../authors.txt to view the current list of authors for this project.\n""")
+    coauthors = prompt('[INPUT]: Enter co-author(s) -',
+                       completer=author_prompter.suggestions, complete_while_typing=True,
+                       validator=author_validator, validate_while_typing=False
+                       )
+
+
+if __name__ == '__main__':
+    get_commit_coauthors(coauthors_tmp_filepath)
