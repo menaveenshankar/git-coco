@@ -99,6 +99,8 @@ def get_commit_coauthors(coauthors_tmp_filepath):
                        validator=author_validator, validate_while_typing=False
                        )
     coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict)
+    with open(coauthors_tmp_filepath, 'w') as f:
+        f.write(coauths_msg.co_authors)
 
 
 if __name__ == '__main__':
