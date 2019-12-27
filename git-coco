@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 import sys
-import os
 import subprocess
 from os import getenv
+from os import remove as remove_path
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
 from prompt_toolkit import prompt
@@ -33,7 +33,6 @@ class AuthorPrompter(object):
         self.authors_dict = self.read_authors_file(authors_file)
         first_name_dict = self.map_first_name_to_details(self.authors_dict)
         self.authors_dict.update(first_name_dict)
-        print(self.authors_dict)
         self.suggestions = self.populate_prompter()
 
     def read_authors_file(self, authors_file):
@@ -108,3 +107,6 @@ if __name__ == '__main__':
     else:
         print('[INFO]: Friendly version of the hook runs on >= python3.6. Falling back to the (old) geeky version')
     subprocess.call(['git', 'commit', gitcommit_args])
+
+    if exists(config['coauthors_git_msg']):
+        remove_path(config['coauthors_git_msg'])
