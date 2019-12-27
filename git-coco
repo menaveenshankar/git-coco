@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 
-import sys, os
+import sys
+import os
+import subprocess
+from os import getenv
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
 from prompt_toolkit import prompt
@@ -15,6 +18,7 @@ except ImportError:
 
 config = {
     'path_authors_file': join_path(dirname(__file__), 'authors.txt'),
+    'coauthors_git_msg': join_path(getenv('HOME'), '.coauthors.tmp')
 }
 
 
@@ -104,4 +108,6 @@ def get_commit_coauthors(coauthors_tmp_filepath):
 
 
 if __name__ == '__main__':
-    get_commit_coauthors(coauthors_tmp_filepath)
+    gitcommit_args = ''.join(sys.argv[1:])
+    get_commit_coauthors(config['coauthors_git_msg'])
+    subprocess.call(['git', 'commit', gitcommit_args])
