@@ -5,12 +5,7 @@ from os.path import dirname, abspath, exists
 from os.path import join as join_path
 from utils import read_authors_file, config
 from time import sleep
-
-try:
-    from git import Repo
-except ImportError:
-    print('[FAILURE]: gitpython not installed. pip install gitpython')
-    exit(1)
+from git import Repo
 
 
 class CommitMsg(object):
@@ -58,16 +53,6 @@ class CommitMsg(object):
             self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
 
         return self._issue_number
-
-    def read_authors_file(self):
-        try:
-            if not exists(self._authors_file):  raise IOError
-            contents = open(config['relative_path_authors_file'], 'r').readlines()
-            authors = [x.split(':') for x in contents]
-            return dict(authors)
-        except IOError:
-            print('[ERROR]: authors.txt not found, check README!')
-            sys.exit(1)
 
     def prune_incorrect_coauthor_initials(self, author_initials, coauthors_initials):
         authorlst = set(author_initials.keys())
