@@ -15,17 +15,20 @@ config = {
     'domain': 'superhero.universe',
     'issue_url_base': 'https://superhero-jira.net/',
     'use_issue_in_msg': True,
+    'coauthors_git_msg': join_path(getenv('HOME'), '.coauthors.tmp')
 }
 
 
 class CommitMsg(object):
-    def __init__(self, coauthors):
+    def __init__(self):
         githooks_dir = dirname(abspath(__file__))
         self.repo = Repo(CommitMsg.hook_git_path(githooks_dir))
-        self.authors_dict = authors_dict
-        self._coauthors = CommitMsg.non_empty_coauthors_list(coauthors)
-        self.no_coauthors = not self._coauthors
+
+    def fill_issue_number(self):
         self._issue_number = self.parse_issue_number_from_branch() if config['use_issue_in_msg'] else ""
+
+    def fill_coauthors(self):
+        self.coauthors_msg = self.read_authors_msg_friendly() if exists(config['coauthors_git_msg']) else self.read_authors_msg_geeky()
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -61,39 +64,66 @@ class CommitMsg(object):
 
         return self._issue_number
 
-    @staticmethod
-    def non_empty_coauthors_list(coauthors):
-        valid_coauths = [x.strip().upper() for x in coauthors.split(',')]
-        return list(filter(lambda x: x, valid_coauths))
+    def read_authors_file(self):
+        try:
+            if not exists(self._authors_file):  raise IOError
+            contents = open(config['relative_path_authors_file'], 'r').readlines()
+            authors = [x.split(':') for x in contents]
+            return dict(authors)
+        except IOError:
+            print('[ERROR]: authors.txt not found, check README!')
+            sys.exit(1)
 
-    def get_coauthor_name_email(self):
-        return [self.authors_dict[x.strip().upper()].split(',') for x in self._coauthors]
+    def prune_incorrect_coauthor_initials(self, author_initials, coauthors_initials):
+        authorlst = set(author_initials.keys())
+        commit_authors = set(coauthors_initials)
+        correct_coauthors = authorlst.intersection(commit_authors)
+        incorrect_coauthors = commit_authors.difference(authorlst)
+        if incorrect_coauthors:
+            print("[INFO]: These initials are incorrect {}. \n Please check and add them manually\n".format(
+                list(incorrect_coauthors)))
+            sleep(2)
+        return correct_coauthors
 
-    @property
-    def co_authors(self):
-        if self.no_coauthors:
+    def get_coauthor_name_email(self, coauthors_initials):
+        coauth_info = self.read_authors_file()
+        actual_coauthors = self.prune_incorrect_coauthor_initials(coauth_info, coauthors_initials)
+        return [coauth_info[x.strip().upper()].split(',') for x in actual_coauthors]
+
+    def _coauthors_msg(self, coauthors_initials):
+        if not coauthors_initials:
             return '\n'
         else:
             prefix_str = 'Co-authored-by: {}'
             _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), config['domain'])
 
-            coauths_lst = self.get_coauthor_name_email()
+            coauths_lst = self.get_coauthor_name_email(coauthors_initials)
             coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
             # git expects co-authors after two blank lines
             return '\n\n' + '\n'.join(coauths_str) + '\n\n'
 
+    def input_coauthor_initials(self):
+        sys.stdin = open('/dev/tty', 'r')
+        coauthors = input(
+            """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
+            example input - ts, ck (for Tony Stark and Clark Kent )
+            Open ../authors.txt to view the current list of authors for this project.
+            \n[INPUT]: Enter co-author(s) initials: """)
+        return coauthors
 
-def input_coauthor_initials():
-    sys.stdin = open('/dev/tty', 'r')
-    coauthors = input(
-        """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
-        example input - ts, ck (for Tony Stark and Clark Kent )
-        Open ../authors.txt to view the current list of authors for this project.
-        \n[INPUT]: Enter co-author(s) initials: """)
-    return coauthors
+    def read_authors_msg_geeky(self):
+        coauths_csv = self.input_coauthor_initials()
+        coauths_initials_list = [x.strip().upper() for x in coauths_csv.split(',')]
+        coauths_msg = self._coauthors_msg(coauths_initials_list)
+        return coauths_msg
+
+    def read_authors_msg_friendly(self):
+        with open(config['coauthors_git_msg']) as f:
+            coauths_msg = f.read()
+        return coauths_msg
 
 
-def prepare_message(commit_msg_filepath, auths):
+def prepare_message(commit_msg_filepath):
     """
     prepares the message in the format:
 
@@ -108,13 +138,15 @@ def prepare_message(commit_msg_filepath, auths):
 
     # comments
     """
-    commit_msg = CommitMsg(auths)
+    commit_msg = CommitMsg()
+    commit_msg.fill_coauthors()
+    commit_msg.fill_issue_number()
 
     with open(commit_msg_filepath, 'r+') as f:
         msg = f.readlines()
         f.seek(0, 0)
         # first line of variable msg is already filled if git commit -m "<msg>" is executed
-        f.write("{}{}{}{}".format(msg[0], commit_msg.issue_number, commit_msg.co_authors, ''.join(msg[1:])))
+        f.write("{}{}{}{}".format(msg[0], commit_msg.issue_number, commit_msg.coauthors_msg, ''.join(msg[1:])))
 
 
 if __name__ == '__main__':
@@ -125,5 +157,4 @@ if __name__ == '__main__':
     if commit_type not in ['', 'message']:
         sys.exit(0)
 
-    coauthors = input_coauthor_initials()
-    prepare_message(commit_msg_filepath, coauthors)
+    prepare_message(commit_msg_filepath)
