@@ -54,7 +54,7 @@ class CoauthorsCommitMsg(object):
     @property
     def co_authors(self):
         if not self._coauthors:
-            return '\n'
+            return ''
         else:
             prefix_str = 'Co-authored-by: {}'
             _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), config['domain'])
@@ -79,9 +79,10 @@ def get_commit_coauthors(coauthors_tmp_filepath):
                        completer=author_prompter.suggestions, complete_while_typing=True,
                        validator=author_validator, validate_while_typing=False
                        )
-    coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict)
-    with open(coauthors_tmp_filepath, 'w') as f:
-        f.write(coauths_msg.co_authors)
+    coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict).co_authors
+    if coauths_msg:
+        with open(coauthors_tmp_filepath, 'w') as f:
+            f.write(coauths_msg)
 
 
 if __name__ == '__main__':
@@ -90,6 +91,7 @@ if __name__ == '__main__':
         get_commit_coauthors(config['coauthors_git_msg'])
     else:
         print('[INFO]: Friendly version of the hook runs on >= python3.6. Falling back to the (old) geeky version')
+
     subprocess.call(['git', 'commit', gitcommit_args])
 
     if exists(config['coauthors_git_msg']):
