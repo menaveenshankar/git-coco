@@ -8,9 +8,7 @@ def remove_duplicates(new_author_dict):
     current_authors_dict = read_authors_file(config['path_authors_file'])
     duplicate_new_authors = list(set(current_authors_dict.keys()).intersection(set(new_author_dict.keys())))
     print('[INFO]: {} initials already exist. Change and add them again'.format(duplicate_new_authors))
-
-    for x in duplicate_new_authors:
-        new_author_dict.pop(x)
+    new_author_dict = list(map(new_author_dict.pop, duplicate_new_authors))
     return new_author_dict
 
 
