@@ -28,6 +28,6 @@ The following variables under ```config``` in the script should be configured by
 
 ## screenshots
 * input prompt - enter initials. co-author initials which aren't found are printed.
-![coauthor_input](coauthor_input.png)
+![coauthor_input](screenshots/coauthor_input.png)
 * how the commit message looks like after input prompt
-![commit_msg](commit_msg.png)
+![commit_msg](screenshots/commit_msg.png)
