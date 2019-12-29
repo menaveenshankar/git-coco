@@ -26,6 +26,7 @@ def add_new_authors(new_authors):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        print('[ERROR]: no authors specified')
+        print('usage: git-add-authors "author-initials: author-name, author-email". Double quotes are important.')
+        print('Multiple authors can be specified at a time. Author initials have to be unique.')
         exit(1)
     add_new_authors(sys.argv[1:])
