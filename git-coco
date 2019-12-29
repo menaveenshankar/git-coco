@@ -2,18 +2,12 @@
 
 import sys
 import subprocess
-from os import getenv
 from os import remove as remove_path
-from os.path import dirname, abspath, exists
-from os.path import join as join_path
+from os.path import exists
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import Validator, ValidationError
-
-config = {
-    'path_authors_file': join_path(dirname(__file__), 'authors.txt'),
-    'coauthors_git_msg': join_path(getenv('HOME'), '.coauthors.tmp')
-}
+from utils import read_authors_file, config
 
 
 class AuthorValidator(Validator):
@@ -30,20 +24,10 @@ class AuthorValidator(Validator):
 
 class AuthorPrompter(object):
     def __init__(self, authors_file):
-        self.authors_dict = self.read_authors_file(authors_file)
+        self.authors_dict = read_authors_file(authors_file)
         first_name_dict = self.map_first_name_to_details(self.authors_dict)
         self.authors_dict.update(first_name_dict)
         self.suggestions = self.populate_prompter()
-
-    def read_authors_file(self, authors_file):
-        try:
-            if not exists(authors_file):  raise IOError
-            contents = open(authors_file, 'r').readlines()
-            authors = [x.split(':') for x in contents]
-            return dict(authors)
-        except IOError:
-            print('[ERROR]: authors.txt not found, check README!')
-            sys.exit(1)
 
     def map_first_name_to_details(self, authors_dict):
         first_names = [v.split(' ')[1].upper() for v in authors_dict.values()]

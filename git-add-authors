@@ -1,26 +1,15 @@
 #!/usr/bin/python3
 
 from os.path import dirname, join, exists
+from utils import read_authors_file, config
 import sys
-
-
-def read_authors_file(authors_file):
-    try:
-        if not exists(authors_file):  raise IOError
-        contents = open(authors_file, 'r').readlines()
-        authors = [x.split(':') for x in contents]
-        return dict(authors)
-    except IOError:
-        print('[ERROR]: authors.txt not found, check README!')
-        sys.exit(1)
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         print('[ERROR]: no authors specified')
         exit(1)
 
-    authors_file = join(dirname(__file__), 'authors.txt')
-    current_authors_dict = read_authors_file(authors_file)
+    current_authors_dict = read_authors_file(config['path_authors_file'])
     new_author_dict = dict([x.strip('\"').split(':') for x in sys.argv[1:]])
     duplicate_new_authors = list(set(current_authors_dict.keys()).intersection(set(new_author_dict.keys())))
     print('{} initials already exist. Change and add them again'.format(duplicate_new_authors))
@@ -28,6 +17,5 @@ if __name__ == '__main__':
         new_author_dict.pop(x)
     new_authors_list = [':'.join([k, v]) for k, v in new_author_dict.items()]
 
-    with open(authors_file, 'a') as f:
+    with open(config['path_authors_file'], 'a') as f:
         f.write('\n'.join(new_authors_list))
-

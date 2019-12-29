@@ -3,20 +3,14 @@
 import sys
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
+from utils import read_authors_file, config
+from time import sleep
 
 try:
     from git import Repo
 except ImportError:
     print('[FAILURE]: gitpython not installed. pip install gitpython')
     exit(1)
-
-config = {
-    'relative_path_authors_file': '../authors.txt',
-    'domain': 'superhero.universe',
-    'issue_url_base': 'https://superhero-jira.net/',
-    'use_issue_in_msg': True,
-    'coauthors_git_msg': join_path(getenv('HOME'), '.coauthors.tmp')
-}
 
 
 class CommitMsg(object):
@@ -28,7 +22,8 @@ class CommitMsg(object):
         self._issue_number = self.parse_issue_number_from_branch() if config['use_issue_in_msg'] else ""
 
     def fill_coauthors(self):
-        self.coauthors_msg = self.read_authors_msg_friendly() if exists(config['coauthors_git_msg']) else self.read_authors_msg_geeky()
+        self.coauthors_msg = self.read_authors_msg_friendly() if exists(
+            config['coauthors_git_msg']) else self.read_authors_msg_geeky()
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -86,7 +81,7 @@ class CommitMsg(object):
         return correct_coauthors
 
     def get_coauthor_name_email(self, coauthors_initials):
-        coauth_info = self.read_authors_file()
+        coauth_info = read_authors_file(config['path_authors_file'])
         actual_coauthors = self.prune_incorrect_coauthor_initials(coauth_info, coauthors_initials)
         return [coauth_info[x.strip().upper()].split(',') for x in actual_coauthors]
 
