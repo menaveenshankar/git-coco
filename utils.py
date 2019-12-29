@@ -10,11 +10,16 @@ config = {
     'coauthors_git_msg': join_path(getenv('HOME'), '.coauthors.tmp')
 }
 
+
+def author_details_as_dict(authors_details_list):
+    return [x.split(':') for x in authors_details_list]
+
+
 def read_authors_file(authors_file):
     try:
         if not exists(authors_file):  raise IOError
         contents = open(authors_file, 'r').readlines()
-        authors = [x.split(':') for x in contents]
+        authors = author_details_as_dict(contents)
         return dict(authors)
     except IOError:
         print('[ERROR]: authors.txt not found, check README!')
