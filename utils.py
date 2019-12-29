@@ -19,6 +19,7 @@ def read_authors_file(authors_file):
     try:
         if not exists(authors_file):  raise IOError
         contents = open(authors_file, 'r').readlines()
+        contents = filter(lambda x: x.strip(), contents)
         authors = author_details_as_dict(contents)
         return authors
     except IOError:
