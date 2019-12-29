@@ -1,21 +1,31 @@
 #!/usr/bin/python3
 
-from os.path import dirname, join, exists
-from utils import read_authors_file, config
+from utils import read_authors_file, author_details_as_dict, config
 import sys
+
+
+def remove_duplicates(new_author_dict):
+    current_authors_dict = read_authors_file(config['path_authors_file'])
+    duplicate_new_authors = list(set(current_authors_dict.keys()).intersection(set(new_author_dict.keys())))
+    print('[INFO]: {} initials already exist. Change and add them again'.format(duplicate_new_authors))
+
+    for x in duplicate_new_authors:
+        new_author_dict.pop(x)
+    return new_author_dict
+
+
+def add_new_authors(new_authors):
+    new_authors_list = [x.strip('\"') for x in new_authors]
+    new_author_dict = author_details_as_dict(new_authors_list)
+    remove_duplicates(new_author_dict)
+    new_authors_list = [':'.join([k, v]) for k, v in new_author_dict.items()]
+
+    with open(config['path_authors_file'], 'a') as f:
+        f.write('\n'.join(new_authors_list))
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         print('[ERROR]: no authors specified')
         exit(1)
-
-    current_authors_dict = read_authors_file(config['path_authors_file'])
-    new_author_dict = dict([x.strip('\"').split(':') for x in sys.argv[1:]])
-    duplicate_new_authors = list(set(current_authors_dict.keys()).intersection(set(new_author_dict.keys())))
-    print('{} initials already exist. Change and add them again'.format(duplicate_new_authors))
-    for x in duplicate_new_authors:
-        new_author_dict.pop(x)
-    new_authors_list = [':'.join([k, v]) for k, v in new_author_dict.items()]
-
-    with open(config['path_authors_file'], 'a') as f:
-        f.write('\n'.join(new_authors_list))
+    add_new_authors(sys.argv[1:])
