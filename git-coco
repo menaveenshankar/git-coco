@@ -25,13 +25,13 @@ class AuthorValidator(Validator):
 class AuthorPrompter(object):
     def __init__(self, authors_file):
         self.authors_dict = read_authors_file_as_dict(authors_file)
-        first_name_dict = self.map_first_name_to_details(self.authors_dict)
-        self.authors_dict.update(first_name_dict)
+        email_dict = self.map_email_to_details(self.authors_dict)
+        self.authors_dict.update(email_dict)
         self.suggestions = self.populate_prompter()
 
-    def map_first_name_to_details(self, authors_dict):
-        first_names = [v.split(' ')[1].upper() for v in authors_dict.values()]
-        return dict(zip(first_names, authors_dict.values()))
+    def map_email_to_details(self, authors_dict):
+        emails = [v.split(',')[1].strip().upper() for v in authors_dict.values()]
+        return dict(zip(emails, authors_dict.values()))
 
     def populate_prompter(self):
         full_author_names = [v.split(',')[0] for v in self.authors_dict.values()]
