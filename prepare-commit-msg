@@ -3,7 +3,7 @@
 import sys
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
-from utils import read_authors_file, config
+from utils import read_authors_file_as_dict, config
 from time import sleep
 from git import Repo
 
@@ -66,7 +66,7 @@ class CommitMsg(object):
         return correct_coauthors
 
     def get_coauthor_name_email(self, coauthors_initials):
-        coauth_info = read_authors_file(config['path_authors_file'])
+        coauth_info = read_authors_file_as_dict(config['path_authors_file'])
         actual_coauthors = self.prune_incorrect_coauthor_initials(coauth_info, coauthors_initials)
         return [coauth_info[x.strip().upper()].split(',') for x in actual_coauthors]
 

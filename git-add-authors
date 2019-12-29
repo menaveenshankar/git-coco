@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-from utils import read_authors_file, author_details_as_dict, config
+from utils import read_authors_file_as_dict, author_details_as_dict, config
 import sys
 
 
 def remove_duplicates(new_author_dict):
-    current_authors_dict = read_authors_file(config['path_authors_file'])
+    current_authors_dict = read_authors_file_as_dict(config['path_authors_file'])
     duplicate_new_authors = list(set(current_authors_dict.keys()).intersection(set(new_author_dict.keys())))
     print('[INFO]: {} initials already exist. Change and add them again'.format(duplicate_new_authors))
     new_author_dict = list(map(new_author_dict.pop, duplicate_new_authors))
