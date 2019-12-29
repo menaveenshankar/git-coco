@@ -2,18 +2,10 @@
 If you shied away from collaborative coding just because you had to manually add co-authors, then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit message. It gets triggered automatically as soon as you hit ```git commit```. Furthermore, adding issue/task/item number is also supported. Check out the screenshots!
 
 ## Setup
-Only one dependency - ```pip install gitpython```. 
-
-The following steps have to be done for each git repo (just like ```git config```):
-* **prepare-commit-msg** should be copied to each of the respective git repos i.e. ```\<git repo\>/.git/hooks```  
-  For a submodule it should be copied to ```\<git repo\>/.git/modules/\<module name\>/hooks```
-* edit ```config```  in _prepare-commit-msg_ variable as per your needs, see [config](#configs).
-* run ```chmod +x prepare-commit-msg```
-* **authors.txt** should be in the parent directory of prepare-commit-msg hook, i.e., ```\<git repo\>/.git```. It should not have any empty lines. The authors should be in the following format:  
-  \<initials\>: \<full name\>, \<email\>  
-  a common domain is assumed. This can be configured in the script.
-
-and you are good to go! Run ```git commit``` or ```git commit -m "<msg>"``` to see the hook in action. Happy collaborative coding :)
+```chmod +x setup.sh && ./setup.sh <path-to-your-git-repo>```,
+and you are good to go! The setup script symlinks the git hooks in this repo to the git repo where you wanna use the git
+hooks, and also adds the scripts in this repo to ```$PATH```
+Run ```git commit``` or ```git commit -m "<msg>"``` to see the hook in action. Happy collaborative coding :)
   
 **NOTE** - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
 ```git commit --amend --no-edit```
