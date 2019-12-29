@@ -18,10 +18,10 @@ def author_details_as_dict(authors_details_list):
 def read_authors_file(authors_file):
     try:
         if not exists(authors_file):  raise IOError
-        contents = open(authors_file, 'r').readlines()
-        contents = filter(lambda x: x.strip(), contents)
-        authors = author_details_as_dict(contents)
-        return authors
+        with open(authors_file, 'r') as f:
+            contents = filter(lambda x: x.strip(), f.readlines())
+        return author_details_as_dict(contents)
+    
     except IOError:
         print('[ERROR]: authors.txt not found, check README!')
         sys.exit(1)
