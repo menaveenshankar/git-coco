@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 
 import sys
 import subprocess
@@ -8,6 +8,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import Validator, ValidationError
 from utils import read_authors_file_as_dict, config
+from coauthors_commit_msg import CoauthorsCommitMsg
 
 
 class AuthorValidator(Validator):
@@ -39,38 +40,12 @@ class AuthorPrompter(object):
         return WordCompleter(self.authors_dict.keys(), ignore_case=True, match_middle=True, meta_dict=meta_dict)
 
 
-class CoauthorsCommitMsg(object):
-    def __init__(self, coauthors, authors_dict):
-        self._coauthors = self.non_empty_coauthors_list(coauthors)
-        self.authors_dict = authors_dict
-
-    def non_empty_coauthors_list(self, coauthors):
-        valid_coauths = [x.strip().upper() for x in coauthors.split(',')]
-        return list(filter(lambda x: x, valid_coauths))
-
-    def get_coauthor_name_email(self):
-        return [self.authors_dict[x.strip().upper()].split(',') for x in self._coauthors]
-
-    @property
-    def co_authors(self):
-        if not self._coauthors:
-            return ''
-        else:
-            prefix_str = 'Co-authored-by: {}'
-            _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), config['domain'])
-
-            coauths_lst = self.get_coauthor_name_email()
-            coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
-            # git expects co-authors after two blank lines
-            return '\n\n' + '\n'.join(coauths_str) + '\n\n'
-
-
 def get_commit_coauthors(coauthors_tmp_filepath):
     author_prompter = AuthorPrompter(config['path_authors_file'])
     author_validator = AuthorValidator(author_prompter.authors_dict)
     print(
-        """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or first names. 
-        Auto-suggest feature lists the authors in the database (indexed by both initials and first name), and 
+        """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or emails. 
+        Auto-suggest feature lists the authors in the database (indexed by both initials and email), and 
         auto-complete can be used with TAB. Hit ENTER only when you are done adding the coauthors, for selecting the
         co-author use TAB or arrow keys (instead of ENTER).
         example input - TS, CLARK(for Tony Stark and Clark Kent )
@@ -86,6 +61,10 @@ def get_commit_coauthors(coauthors_tmp_filepath):
 
 
 if __name__ == '__main__':
+    if sys.argv[1] in ['--help', '-h']:
+        print('git-coco takes the same arguments as git commit')
+        exit(0)
+
     gitcommit_args = ''.join(sys.argv[1:])
     if sys.version_info >= (3, 6):
         get_commit_coauthors(config['coauthors_git_msg'])
