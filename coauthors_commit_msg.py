@@ -1,5 +1,5 @@
 from time import sleep
-
+from utils import config
 
 class CoauthorsCommitMsg(object):
     def __init__(self, coauthors, authors_dict):
