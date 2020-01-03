@@ -40,8 +40,8 @@ class AuthorPrompter(object):
         return WordCompleter(self.authors_dict.keys(), ignore_case=True, match_middle=True, meta_dict=meta_dict)
 
 
-def get_commit_coauthors(coauthors_tmp_filepath):
-    author_prompter = AuthorPrompter(config['path_authors_file'])
+def get_commit_coauthors(coauthors_config):
+    author_prompter = AuthorPrompter(coauthors_config['authors_file'])
     author_validator = AuthorValidator(author_prompter.authors_dict)
     print(
         """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or emails. 
@@ -54,9 +54,9 @@ def get_commit_coauthors(coauthors_tmp_filepath):
                        completer=author_prompter.suggestions, complete_while_typing=True,
                        validator=author_validator, validate_while_typing=False
                        )
-    coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict).co_authors
+    coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict, coauthors_config).co_authors
     if coauths_msg:
-        with open(coauthors_tmp_filepath, 'w') as f:
+        with open(coauthors_config['coauthors_git_msg_file'], 'w') as f:
             f.write(coauths_msg)
 
 
@@ -67,11 +67,12 @@ if __name__ == '__main__':
 
     gitcommit_args = ''.join(sys.argv[1:])
     if sys.version_info >= (3, 6):
-        get_commit_coauthors(config['coauthors_git_msg'])
+        get_commit_coauthors(config['coauthors'])
     else:
         print('[INFO]: Friendly version of the hook runs on >= python3.6. Falling back to the (old) geeky version')
 
     subprocess.call(['git', 'commit', gitcommit_args])
 
-    if exists(config['coauthors_git_msg']):
-        remove_path(config['coauthors_git_msg'])
+    coco_msg_file = config['coauthors']['coauthors_git_msg_file']
+    if exists(coco_msg_file):
+        remove_path(coco_msg_file)

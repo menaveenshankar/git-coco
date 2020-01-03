@@ -1,9 +1,10 @@
 from time import sleep
-from utils import config
+
 
 class CoauthorsCommitMsg(object):
-    def __init__(self, coauthors, authors_dict):
+    def __init__(self, coauthors, authors_dict, config_coauthors):
         self._coauthors = self.non_empty_coauthors_list(coauthors)
+        self._config = config_coauthors
         self.authors_dict = authors_dict
 
     def non_empty_coauthors_list(self, coauthors):
@@ -31,7 +32,7 @@ class CoauthorsCommitMsg(object):
             return '\n'
         else:
             prefix_str = 'Co-authored-by: {}'
-            _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), config['domain'])
+            _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), self._config['domain'])
 
             coauths_lst = self.get_coauthor_name_email()
             coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
