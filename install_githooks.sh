@@ -46,9 +46,9 @@ chmod +x ${PWD}/git-add-authors
 chmod +x ${PWD}/git-coco
 
 # symlink git hooks
-ln -s ${PWD}/git_hooks/authors.txt ${dir_path}/;
+ln -s ${PWD}/authors.txt ${dir_path}/;
 add_on_exit_code
-ln -s ${PWD}/git_hooks/prepare-commit-msg ${dir_path}/hooks/;
+ln -s ${PWD}/prepare-commit-msg ${dir_path}/hooks/;
 add_on_exit_code
 
 if [ $sum_exit_codes -ne 0 ]

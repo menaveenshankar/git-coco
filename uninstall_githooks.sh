@@ -21,9 +21,9 @@ function add_on_exit_code {
 }
 
 # remove git hooks
-rm ${dir_path}/git_hooks/authors.txt;
+rm ${dir_path}/authors.txt;
 add_on_exit_code
-rm ${dir_path}/git_hooks/prepare-commit-msg;
+rm ${dir_path}/prepare-commit-msg;
 add_on_exit_code
 
 if [ $sum_exit_codes -ne 0 ]
