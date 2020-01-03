@@ -3,11 +3,15 @@ from os.path import dirname, exists, join as join_path
 import sys
 
 config = {
-    'path_authors_file': join_path(dirname(__file__), 'authors.txt'),
-    'domain': 'superhero.universe',
-    'issue_url_base': 'https://superhero-jira.net/',
-    'use_issue_in_msg': True,
-    'coauthors_git_msg': join_path(getenv('HOME'), '.coauthors.tmp')
+    'coauthors': {
+        'authors_file': join_path(dirname(__file__), 'authors.txt'),
+        'coauthors_git_msg_file': join_path(getenv('HOME'), '.coauthors.tmp'),
+        'domain': 'superhero.universe'
+    },
+    'issue': {
+        'issue_url_base': 'https://superhero-jira.net/',
+        'use_issue_in_msg': True
+    }
 }
 
 
