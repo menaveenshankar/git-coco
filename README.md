@@ -14,12 +14,12 @@ and you are good to go! The setup script symlinks the git hooks in this repo to 
 hooks, and also adds the scripts in this repo to ```$PATH```. Happy collaborative coding :)
 
 ### Scripts in $PATH
-* **User friendly version** - Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
+* **Autosuggest version** - Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autosuggest feature. Input can be either author's initials
  or their email ids.
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
-* **Geeky version** - If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
-will not work. However, you can still add the coauthors using initials only.
+* **Eidetic version** - If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
+will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember the initials! :D
 ![coauthor_input](screenshots/coauthor_input.png)
 * **Add authors to database** - to update ```authors.txt``` run ```git-add-authors```. It takes a list of authors
 in the format specified in ```authors.txt```. e.g. ```git-add-authors "NR: Natasha Romanoff, black-widow" "AC: Arthur Curry, aquaman"```. 
@@ -49,5 +49,5 @@ How the final commit message looks like:
 **NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
 ## Tags
-* **v1.0** - checkout this tag to just use the geeky version, i.e., author initials based input
+* **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
 * **v2.0** - checkout this tag to use the autosuggest version

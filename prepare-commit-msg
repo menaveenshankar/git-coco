@@ -20,8 +20,8 @@ class CommitMsg(object):
 
     def fill_coauthors(self):
         git_coco_msg_file = self._config_coauthors['coauthors_git_msg_file']
-        self.coauthors_msg = self.read_authors_msg_friendly(git_coco_msg_file) if exists(
-            git_coco_msg_file) else self.read_authors_msg_geeky(self._config_coauthors['authors_file'])
+        self.coauthors_msg = self.read_authors_msg_autosuggest(git_coco_msg_file) if exists(
+            git_coco_msg_file) else self.read_authors_msg_eidetic(self._config_coauthors['authors_file'])
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -67,13 +67,13 @@ class CommitMsg(object):
             \n[INPUT]: Enter co-author(s) initials: """)
         return coauthors
 
-    def read_authors_msg_geeky(self, authors_file):
+    def read_authors_msg_eidetic(self, authors_file):
         coauths_csv = self.input_coauthor_initials()
         authors_dict = read_authors_file_as_dict(authors_file)
         coco_msg = CoauthorsCommitMsg(coauths_csv, authors_dict, self._config_coauthors)
         return coco_msg.co_authors
 
-    def read_authors_msg_friendly(self, git_coco_msg_file):
+    def read_authors_msg_autosuggest(self, git_coco_msg_file):
         with open(git_coco_msg_file) as f:
             coauths_msg = f.read()
         return coauths_msg

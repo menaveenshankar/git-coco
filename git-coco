@@ -69,7 +69,7 @@ if __name__ == '__main__':
     if sys.version_info >= (3, 6):
         get_commit_coauthors(config['coauthors'])
     else:
-        print('[INFO]: Friendly version of the hook runs on >= python3.6. Falling back to the (old) geeky version')
+        print('[INFO]: Autosuggest version of the hook runs on >= python3.6. Reverting back to the (old) eidetic version')
 
     subprocess.call(['git', 'commit', gitcommit_args])
 
