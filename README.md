@@ -47,3 +47,7 @@ How the final commit message looks like:
 ![commit_msg](screenshots/commit_msg.png)
 
 **NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
+
+## Tags
+* **v1.0** - checkout this tag to just use the geeky version, i.e., author initials based input
+* **v2.0** - checkout this tag to use the autosuggest version
