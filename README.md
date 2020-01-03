@@ -5,6 +5,7 @@ message. It gets triggered automatically as soon as you hit ```git commit```.
 Furthermore, adding issue/task/item number is also supported. Check out the screenshots!
 
 ## Setup
+Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
 ```
 chmod +x install_githooks.sh
 ./install_githooks.sh <path-to-your-git-repo>
@@ -16,9 +17,11 @@ hooks, and also adds the scripts in this repo to ```$PATH```. Happy collaborativ
 * **User friendly version** - Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autosuggest feature. Input can be either author's initials
  or their email ids.
-* *Geeky version* - If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
+ ![autosuggest_coauthor_input](screenshots/autosuggest.png)
+* **Geeky version** - If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
 will not work. However, you can still add the coauthors using initials only.
-* *Add authors to database* - to update ```authors.txt``` run ```git-add-authors```. It takes a list of authors
+![coauthor_input](screenshots/coauthor_input.png)
+* **Add authors to database** - to update ```authors.txt``` run ```git-add-authors```. It takes a list of authors
 in the format specified in ```authors.txt```. e.g. ```git-add-authors "NR: Natasha Romanoff, black-widow" "AC: Arthur Curry, aquaman"```. 
 Only unique initials can be added. The script takes care of checking if the initials are unique.
   
@@ -28,8 +31,6 @@ Only unique initials can be added. The script takes care of checking if the init
 ### Issue number (additional feature)
 If you are using frameworks like jira or codebeamer for tracking tasks, then you can also add the corresponding task/issue number
 to the commit message. This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number. However, if your branch name does not contain the issue number then you will be prompted to enter it manually. Check the screenshots for an overview.
-
-**NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
@@ -41,10 +42,8 @@ The following variables under ```config``` in the script should be configured by
                        then you can set the base url. Only one issue number per commit is supported currently. However, more can be manually added by amending the commit.
 * **use_issue_in_msg** - set it to False if issue number in commit message is not needed. Default is True.
 
-## screenshots
-* autosuggest based input -
-![autosuggest_coauthor_input](screenshots/autosuggest.png)
-* input prompt - enter initials. co-author initials which aren't found are printed.
-![coauthor_input](screenshots/coauthor_input.png)
-* how the commit message looks like after input prompt
+##
+How the final commit message looks like:
 ![commit_msg](screenshots/commit_msg.png)
+
+**NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
