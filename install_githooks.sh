@@ -40,8 +40,10 @@ function add_on_exit_code {
 		sum_exit_codes=$(($sum_exit_codes+1))
 	fi
 }
-## setup git hooks
-chmod +x ${PWD}/git_hooks/prepare-commit-msg
+## setup git hook and scripts
+chmod +x ${PWD}/prepare-commit-msg
+chmod +x ${PWD}/git-add-authors
+chmod +x ${PWD}/git-coco
 
 # symlink git hooks
 ln -s ${PWD}/git_hooks/authors.txt ${dir_path}/;
