@@ -27,7 +27,7 @@ case "${unameOut}" in
     *)          echo "[INFO]: Supported only on Linux and Mac. For other OSes carry out the following steps manually";;
 esac
 
-if [[ ! ${PWD} =~ $PATH ]]; then
+if [[ ! $PATH =~ ${PWD} ]]; then
   printf "#githooks to PATH\n" >> ${bashrc_file};
   printf "export PATH=\$PATH:$(pwd)" >> ${bashrc_file};
 fi
