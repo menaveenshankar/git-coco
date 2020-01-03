@@ -16,7 +16,15 @@ python -c "import git" &> /dev/null;
 if [ $? -eq 1 ];
 then
   echo "[INFO]: Installing gitpython";
-  pip install gitpython;
+  pip3 install gitpython;
+fi
+
+# check if prompt-toolkit is installed
+python -c "import prompt-toolkit" &> /dev/null;
+if [ $? -eq 1 ];
+then
+  echo "[INFO]: Installing prompt-toolkit";
+  pip3 install prompt-toolkit;
 fi
 
 #check if PATH is updated in bashrc
