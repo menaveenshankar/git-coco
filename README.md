@@ -7,7 +7,8 @@ Furthermore, adding issue/task/item number is also supported. Check out the scre
 ## Setup
 Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
 ```
-./install_githooks.sh <path-to-your-git-repo>
+./setup.sh
+install_githooks.sh <absolute-path-to-your-git-repo>
 ```
 and you are good to go! The setup script symlinks the git hooks in this repo to the git repo where you wanna use the git
 hooks, and also adds the scripts in this repo to ```$PATH```. Happy collaborative coding :)
@@ -23,7 +24,9 @@ will not work. However, you can still add the coauthors using initials only. Its
 * ```git-add-authors```: to update ```authors.txt``` run ```git-add-authors```. It takes a list of authors
 in the format specified in ```authors.txt```. e.g. ```git-add-authors "NR: Natasha Romanoff, black-widow" "KM: Krishna Mehra, krrish"```. 
 Only unique initials can be added. The script takes care of checking if the initials are unique.
-  
+* ```install_githooks.sh``` and ```uninstall_githooks.sh``` can be used to install and uninstall
+githooks for a particular repo respectively.
+
 **NOTE** - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
 ```git commit --amend --no-edit```
 
