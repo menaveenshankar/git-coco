@@ -12,8 +12,8 @@ dir_path=$1
 PWD=$(pwd)
 
 # remove git hooks
-rm ${dir_path}/authors.txt;
-rm ${dir_path}/prepare-commit-msg;
+rm ${dir_path}/.git/authors.txt;
+rm ${dir_path}/.git/hooks/prepare-commit-msg;
 
 if [ $? -ne 0 ]
 then
