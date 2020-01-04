@@ -40,6 +40,13 @@ if [[ ! $PATH =~ ${PWD} ]]; then
   printf "export PATH=\$PATH:$(pwd)" >> ${bashrc_file};
 fi
 
+# symlink python3 for a common path to interpreter across platforms
+py3_symlink="/usr/bin/python3"
+if [[ ! ${py3_symlink}  == $(which python3) ]]; then
+  echo "[INFO]: creating a symlink for python3 interpreter (requires super user password)"
+  sudo ln -s "$(which python3)" ${py3_symlink}
+fi
+
 ## setup git hook and scripts
 chmod +x ${PWD}/prepare-commit-msg
 chmod +x ${PWD}/git-add-authors
