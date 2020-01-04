@@ -12,7 +12,7 @@ Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
 and you are good to go! The setup script symlinks the git hooks in this repo to the git repo where you wanna use the git
 hooks, and also adds the scripts in this repo to ```$PATH```. Happy collaborative coding :)
 
-## How and what to use?
+## How-to
 * ```git-coco``` (**Autosuggest version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autosuggest feature. Input can be either author's initials
  or their email ids.
@@ -21,7 +21,7 @@ hooks, and also adds the scripts in this repo to ```$PATH```. Happy collaborativ
 will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember all the initials! :D
 ![coauthor_input](screenshots/coauthor_input.png)
 * ```git-add-authors```: to update ```authors.txt``` run ```git-add-authors```. It takes a list of authors
-in the format specified in ```authors.txt```. e.g. ```git-add-authors "NR: Natasha Romanoff, black-widow" "AC: Arthur Curry, aquaman"```. 
+in the format specified in ```authors.txt```. e.g. ```git-add-authors "NR: Natasha Romanoff, black-widow" "KM: Krishna Mehra, krrish"```. 
 Only unique initials can be added. The script takes care of checking if the initials are unique.
   
 **NOTE** - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
