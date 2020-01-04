@@ -1,31 +1,28 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import sys
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
-from time import sleep
-
-try:
-    from git import Repo
-except ImportError:
-    print('[FAILURE]: gitpython not installed. pip install gitpython')
-    exit(1)
-
-config = {
-    'domain': 'superhero.universe',
-    'issue_url_base': 'https://superhero-jira.net/',
-    'use_issue_in_msg': True
-}
+from utils import read_authors_file_as_dict, config
+from coauthors_commit_msg import CoauthorsCommitMsg
+from git import Repo
 
 
 class CommitMsg(object):
-    def __init__(self, coauthors):
+    def __init__(self, config):
         githooks_dir = dirname(abspath(__file__))
         self.repo = Repo(CommitMsg.hook_git_path(githooks_dir))
-        self._authors_file = join_path(dirname(githooks_dir), 'authors.txt')
-        self._coauthors = [x.strip().upper() for x in coauthors.split(',')]
-        self.no_coauthors = (self._coauthors[0] == '')
-        self._issue_number = self.parse_issue_number_from_branch() if config['use_issue_in_msg'] else ""
+        self._config_coauthors = config['coauthors']
+        self._config_issue = config['issue']
+        self.coauthors_msg = self._issue_number = ""
+
+    def fill_issue_number(self):
+        self._issue_number = self.parse_issue_number_from_branch() if self._config_issue['use_issue_in_msg'] else ""
+
+    def fill_coauthors(self):
+        git_coco_msg_file = self._config_coauthors['coauthors_git_msg_file']
+        self.coauthors_msg = self.read_authors_msg_autosuggest(git_coco_msg_file) if exists(
+            git_coco_msg_file) else self.read_authors_msg_eidetic(self._config_coauthors['authors_file'])
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -41,8 +38,9 @@ class CommitMsg(object):
     def parse_issue_number_from_branch(self):
         if self.repo.head.is_detached:  return ''
         issue_number = CommitMsg.is_issue_number_in_branch(self.repo.active_branch.name)
-        # if isse number is part of the branch name
+        # if issue number is part of the branch name
         if issue_number is None:
+            sys.stdin = open('/dev/tty', 'r')
             issue_number = str(input('[INPUT]: Enter issue number (optional): '))
 
         return issue_number
@@ -56,62 +54,33 @@ class CommitMsg(object):
     @property
     def issue_number(self):
         if self._issue_number:
-            issue_url = config['issue_url_base'] + self._issue_number
+            issue_url = self._config_issue['issue_url_base'] + self._issue_number
             self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
 
         return self._issue_number
 
-    def read_authors_file(self):
-        try:
-            if not exists(self._authors_file):  raise IOError
-            contents = open(self._authors_file, 'r').readlines()
-            authors = [x.split(':') for x in contents]
-            return dict(authors)
-        except IOError:
-            print('[ERROR]: authors.txt not found, check README!')
-            sys.exit(1)
+    def input_coauthor_initials(self):
+        sys.stdin = open('/dev/tty', 'r')
+        coauthors = input(
+            """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
+            example input - ts, ck (for Tony Stark and Clark Kent )
+            Open ../authors.txt to view the current list of authors for this project.
+            \n[INPUT]: Enter co-author(s) initials: """)
+        return coauthors
 
-    def prune_incorrect_coauthor_initials(self, author_initials):
-        authorlst = set(author_initials.keys())
-        commit_authors = set(self._coauthors)
-        correct_coauthors = authorlst.intersection(commit_authors)
-        incorrect_coauthors = commit_authors.difference(authorlst)
-        if incorrect_coauthors:
-            print("[INFO]: These initials are incorrect {}. \n Please check and add them manually\n".format(
-                list(incorrect_coauthors)))
-            sleep(2)
-        return correct_coauthors
+    def read_authors_msg_eidetic(self, authors_file):
+        coauths_csv = self.input_coauthor_initials()
+        authors_dict = read_authors_file_as_dict(authors_file)
+        coco_msg = CoauthorsCommitMsg(coauths_csv, authors_dict, self._config_coauthors)
+        return coco_msg.co_authors
 
-    def get_coauthor_name_email(self):
-        coauth_info = self.read_authors_file()
-        actual_coauthors = self.prune_incorrect_coauthor_initials(coauth_info)
-        return [coauth_info[x.strip().upper()].split(',') for x in actual_coauthors]
-
-    @property
-    def co_authors(self):
-        if self.no_coauthors:
-            return '\n'
-        else:
-            prefix_str = 'Co-authored-by: {}'
-            _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), config['domain'])
-
-            coauths_lst = self.get_coauthor_name_email()
-            coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
-            # git expects co-authors after two blank lines
-            return '\n\n' + '\n'.join(coauths_str) + '\n\n'
+    def read_authors_msg_autosuggest(self, git_coco_msg_file):
+        with open(git_coco_msg_file) as f:
+            coauths_msg = f.read()
+        return coauths_msg
 
 
-def input_coauthor_initials():
-    sys.stdin = open('/dev/tty', 'r')
-    coauthors = input(
-        """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
-        example input - ts, ck (for Tony Stark and Clark Kent )
-        Open ../authors.txt to view the current list of authors for this project.
-        \n[INPUT]: Enter co-author(s) initials: """)
-    return coauthors
-
-
-def prepare_message(commit_msg_filepath, auths):
+def prepare_message(commit_msg_filepath, config):
     """
     prepares the message in the format:
 
@@ -126,13 +95,15 @@ def prepare_message(commit_msg_filepath, auths):
 
     # comments
     """
-    commit_msg = CommitMsg(auths)
+    commit_msg = CommitMsg(config)
+    commit_msg.fill_coauthors()
+    commit_msg.fill_issue_number()
 
     with open(commit_msg_filepath, 'r+') as f:
         msg = f.readlines()
         f.seek(0, 0)
         # first line of variable msg is already filled if git commit -m "<msg>" is executed
-        f.write("{}{}{}{}".format(msg[0], commit_msg.issue_number, commit_msg.co_authors, ''.join(msg[1:])))
+        f.write("{}{}{}{}".format(msg[0], commit_msg.issue_number, commit_msg.coauthors_msg, ''.join(msg[1:])))
 
 
 if __name__ == '__main__':
@@ -143,5 +114,4 @@ if __name__ == '__main__':
     if commit_type not in ['', 'message']:
         sys.exit(0)
 
-    coauthors = input_coauthor_initials()
-    prepare_message(commit_msg_filepath, coauthors)
+    prepare_message(commit_msg_filepath, config)

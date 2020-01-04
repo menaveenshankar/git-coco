@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+
+import sys
+import subprocess
+from os import remove as remove_path
+from os.path import exists
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.validation import Validator, ValidationError
+from utils import read_authors_file_as_dict, config
+from coauthors_commit_msg import CoauthorsCommitMsg
+
+
+class AuthorValidator(Validator):
+    def __init__(self, author_suggestions):
+        self.author_suggestions = author_suggestions
+
+    def validate(self, document):
+        authors = [x.strip().upper() for x in document.text.split(',')]
+        valid_authors = self.author_suggestions.keys()
+        invalid_authors = list(filter(lambda x: x not in valid_authors, authors))
+        if invalid_authors and invalid_authors[0] != '':
+            raise ValidationError(message='[ERROR]: Invalid authors - {}'.format(invalid_authors))
+
+
+class AuthorPrompter(object):
+    def __init__(self, authors_file):
+        self.authors_dict = read_authors_file_as_dict(authors_file)
+        email_dict = self._map_email_to_details(self.authors_dict)
+        self.authors_dict.update(email_dict)
+        self.suggestions = self.populate_prompter()
+
+    def _map_email_to_details(self, authors_dict):
+        emails = [v.split(',')[1].strip().upper() for v in authors_dict.values()]
+        return dict(zip(emails, authors_dict.values()))
+
+    def populate_prompter(self):
+        full_author_names = [v.split(',')[0] for v in self.authors_dict.values()]
+        meta_dict = dict(zip(self.authors_dict.keys(), full_author_names))
+        return WordCompleter(self.authors_dict.keys(), ignore_case=True, match_middle=True, meta_dict=meta_dict)
+
+
+def get_commit_coauthors(coauthors_config):
+    author_prompter = AuthorPrompter(coauthors_config['authors_file'])
+    author_validator = AuthorValidator(author_prompter.authors_dict)
+    print(
+        """\n[INFO]: ADD co-authors (if any) as a comma separated list of either 2 letter initials or emails. 
+        Auto-suggest feature lists the authors in the database (indexed by both initials and email), and 
+        auto-complete can be used with TAB. Hit ENTER only when you are done adding the coauthors, for selecting the
+        co-author use TAB or arrow keys (instead of ENTER).
+        example input - TS, SUPERMAN(for Tony Stark and Clark Kent )
+        Open ../authors.txt to view the current list of authors for this project.\n""")
+    coauthors = prompt('[INPUT]: Enter co-author(s) -',
+                       completer=author_prompter.suggestions, complete_while_typing=True,
+                       validator=author_validator, validate_while_typing=False
+                       )
+    coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict, coauthors_config).co_authors
+    if coauths_msg:
+        with open(coauthors_config['coauthors_git_msg_file'], 'w') as f:
+            f.write(coauths_msg)
+
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h']:
+        print('git-coco takes the same arguments as git commit')
+        exit(0)
+
+    # use autosuggest for correct versions, else the default git commit
+    if sys.version_info >= (3, 6):
+        get_commit_coauthors(config['coauthors'])
+    else:
+        print(
+            '[INFO]: Autosuggest version of the hook runs on >= python3.6. Reverting back to the (old) eidetic version')
+
+    # call git commit with args if any
+    gitcommit_call = ['git', 'commit']
+    if len(sys.argv) > 1:
+        gitcommit_call.append(''.join(sys.argv[1:]))
+    subprocess.call(gitcommit_call)
+
+    # cleanup
+    coco_msg_file = config['coauthors']['coauthors_git_msg_file']
+    if exists(coco_msg_file):
+        remove_path(coco_msg_file)

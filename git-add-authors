@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+from utils import read_authors_file_as_dict, author_details_as_dict, config
+import sys
+
+
+def _remove_duplicates(new_author_dict, authors_file):
+    current_authors_dict = read_authors_file_as_dict(authors_file)
+    duplicate_new_authors = list(set(current_authors_dict.keys()).intersection(set(new_author_dict.keys())))
+    print('[INFO]: {} initials already exist. Change and add them again'.format(duplicate_new_authors))
+    new_author_dict = list(map(new_author_dict.pop, duplicate_new_authors))
+    return new_author_dict
+
+
+def add_new_authors(new_authors, coauthors_config):
+    new_authors_list = [x.strip('\"') for x in new_authors]
+    new_author_dict = author_details_as_dict(new_authors_list)
+    _remove_duplicates(new_author_dict, coauthors_config['authors_file'])
+    new_authors_list = [':'.join([k, v]) for k, v in new_author_dict.items()]
+
+    with open(coauthors_config['authors_file'], 'a') as f:
+        f.write('\n'.join(new_authors_list))
+
+
+if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        print('usage: git-add-authors "author-initials: author-name, author-email". Double quotes are important.')
+        print('Multiple authors can be specified at a time. Author initials have to be unique.')
+        exit(1)
+    add_new_authors(sys.argv[1:], config['coauthors'])
