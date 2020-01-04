@@ -15,7 +15,7 @@ hooks, and also adds the scripts in this repo to ```$PATH```. Happy collaborativ
 ## How-to
 * ```git-coco``` (**Autosuggest version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autosuggest feature. Input can be either author's initials
- or their email ids.
+ or their email ids. **coco** is short for "*co*author *co*mmit".
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
 * **Eidetic version**: If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
 will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember all the initials! :D
