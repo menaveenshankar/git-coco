@@ -38,7 +38,6 @@ esac
 if [[ ! $PATH =~ ${PWD} ]]; then
   printf "#githooks to PATH\n" >> ${bashrc_file};
   printf "export PATH=\$PATH:$(pwd)" >> ${bashrc_file};
-  source ${bashrc_file}
 fi
 
 ## setup git hook and scripts
@@ -54,5 +53,5 @@ if [ $? -ne 0 ]
 then
 	echo -e '\e[91mCould not create some symlinks!\e[39m';
 else
-	echo -e '\e[92mSymlinks created! Git hooks can be used now.\e[39m';
+	echo -e '\e[92mSymlinks created! Git hooks can be used after restarting terminal.\e[39m';
 fi;
