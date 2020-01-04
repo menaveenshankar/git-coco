@@ -20,7 +20,7 @@ then
 fi
 
 # check if prompt-toolkit is installed
-python -c "import prompt-toolkit" &> /dev/null;
+python -c "import prompt_toolkit" &> /dev/null;
 if [ $? -eq 1 ];
 then
   echo "[INFO]: Installing prompt-toolkit";
@@ -40,14 +40,6 @@ if [[ ! $PATH =~ ${PWD} ]]; then
   printf "export PATH=\$PATH:$(pwd)" >> ${bashrc_file};
 fi
 
-# keep track of exit codes during symlinking
-sum_exit_codes=0
-function add_on_exit_code {
-	if [ $? -ne 0 ]
-	then
-		sum_exit_codes=$(($sum_exit_codes+1))
-	fi
-}
 ## setup git hook and scripts
 chmod +x ${PWD}/prepare-commit-msg
 chmod +x ${PWD}/git-add-authors
@@ -55,11 +47,9 @@ chmod +x ${PWD}/git-coco
 
 # symlink git hooks
 ln -s ${PWD}/authors.txt ${dir_path}/;
-add_on_exit_code
 ln -s ${PWD}/prepare-commit-msg ${dir_path}/hooks/;
-add_on_exit_code
 
-if [ $sum_exit_codes -ne 0 ]
+if [ $? -ne 0 ]
 then
 	echo -e '\e[91mCould not create some symlinks!\e[39m';
 else
