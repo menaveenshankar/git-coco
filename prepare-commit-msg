@@ -14,6 +14,7 @@ class CommitMsg(object):
         self.repo = Repo(CommitMsg.hook_git_path(githooks_dir))
         self._config_coauthors = config['coauthors']
         self._config_issue = config['issue']
+        self.coauthors_msg = self._issue_number = ""
 
     def fill_issue_number(self):
         self._issue_number = self.parse_issue_number_from_branch() if self._config_issue['use_issue_in_msg'] else ""
@@ -37,7 +38,7 @@ class CommitMsg(object):
     def parse_issue_number_from_branch(self):
         if self.repo.head.is_detached:  return ''
         issue_number = CommitMsg.is_issue_number_in_branch(self.repo.active_branch.name)
-        # if isse number is part of the branch name
+        # if issue number is part of the branch name
         if issue_number is None:
             sys.stdin = open('/dev/tty', 'r')
             issue_number = str(input('[INPUT]: Enter issue number (optional): '))

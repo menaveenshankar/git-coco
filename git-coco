@@ -26,11 +26,11 @@ class AuthorValidator(Validator):
 class AuthorPrompter(object):
     def __init__(self, authors_file):
         self.authors_dict = read_authors_file_as_dict(authors_file)
-        email_dict = self.map_email_to_details(self.authors_dict)
+        email_dict = self._map_email_to_details(self.authors_dict)
         self.authors_dict.update(email_dict)
         self.suggestions = self.populate_prompter()
 
-    def map_email_to_details(self, authors_dict):
+    def _map_email_to_details(self, authors_dict):
         emails = [v.split(',')[1].strip().upper() for v in authors_dict.values()]
         return dict(zip(emails, authors_dict.values()))
 
@@ -48,7 +48,7 @@ def get_commit_coauthors(coauthors_config):
         Auto-suggest feature lists the authors in the database (indexed by both initials and email), and 
         auto-complete can be used with TAB. Hit ENTER only when you are done adding the coauthors, for selecting the
         co-author use TAB or arrow keys (instead of ENTER).
-        example input - TS, CLARK(for Tony Stark and Clark Kent )
+        example input - TS, SUPERMAN(for Tony Stark and Clark Kent )
         Open ../authors.txt to view the current list of authors for this project.\n""")
     coauthors = prompt('[INPUT]: Enter co-author(s) -',
                        completer=author_prompter.suggestions, complete_while_typing=True,
@@ -69,10 +69,12 @@ if __name__ == '__main__':
     if sys.version_info >= (3, 6):
         get_commit_coauthors(config['coauthors'])
     else:
-        print('[INFO]: Autosuggest version of the hook runs on >= python3.6. Reverting back to the (old) eidetic version')
+        print(
+            '[INFO]: Autosuggest version of the hook runs on >= python3.6. Reverting back to the (old) eidetic version')
 
     subprocess.call(['git', 'commit', gitcommit_args])
 
+    # cleanup
     coco_msg_file = config['coauthors']['coauthors_git_msg_file']
     if exists(coco_msg_file):
         remove_path(coco_msg_file)
