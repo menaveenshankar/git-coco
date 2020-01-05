@@ -5,9 +5,11 @@ import sys
 import subprocess
 from os import remove as remove_path
 from os.path import exists
-from prompt_toolkit import prompt
+from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import Validator, ValidationError
+from prompt_toolkit.history import FileHistory
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from utils import read_authors_file_as_dict, config
 from coauthors_commit_msg import CoauthorsCommitMsg
 
@@ -51,10 +53,12 @@ def get_commit_coauthors(coauthors_config):
         co-author use TAB or arrow keys (instead of ENTER).
         example input - TS, SUPERMAN(for Tony Stark and Clark Kent )
         Open ../authors.txt to view the current list of authors for this project.\n""")
-    coauthors = prompt('[INPUT]: Enter co-author(s) -',
-                       completer=author_prompter.suggestions, complete_while_typing=True,
-                       validator=author_validator, validate_while_typing=False
-                       )
+    session = PromptSession(history=FileHistory(coauthors_config['history']))
+    coauthors = session.prompt('[INPUT]: Enter co-author(s) -',
+                               completer=author_prompter.suggestions, complete_while_typing=True,
+                               validator=author_validator, validate_while_typing=False,
+                               auto_suggest=AutoSuggestFromHistory()
+                               )
     coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict, coauthors_config).co_authors
     if coauths_msg:
         with open(coauthors_config['coauthors_git_msg_file'], 'w') as f:
