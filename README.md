@@ -63,5 +63,7 @@ How the final commit message looks like:
 **NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
 ## Version Tags
+Latest version is always the topmost tag in the following list:
+* **v2.1** - single script to install/uninstall git hooks
+* **v2.0** - added autosuggest version
 * **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
-* **v2.0** - checkout this tag to use the autosuggest version
