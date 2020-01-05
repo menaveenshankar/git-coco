@@ -66,7 +66,7 @@ However, if your branch name does not contain the issue number then you will be 
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
-### mutable
+### mutable (edit these)
 * **domain** - the domain of your organization. e.g. gmail.com
 * **issue_url_base** - if you are using frameworks like jira or codebeamer for tracking tasks,
                        then you can set the base url. Only one issue number per commit is supported currently. However, more can be manually added by amending the commit.
@@ -77,7 +77,7 @@ The following variables under ```config``` in the script should be configured by
                                    of hooks. However, if several projects share the author list then this path can be
                                    accordingly adjusted.
 * **coauthors_git_msg_file** - ```.coauthors.tmp``` is used to store the co-author message temporarily. This resides under the home directory.
-* **history** - ```.git_coco_history``` is used to store the history of co-authors, resides under the home directory.
+* **history_file** - ```.git_coco_history``` is used to store the history of co-authors, resides under the home directory.
 
 ##
 How the final commit message looks like:
@@ -94,8 +94,8 @@ Latest version is always the topmost tag in the following list:
 
 ## Why coco
 Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git commit?
-```git-coco``` was born because the default hook environment provides a very minimal tty where features built on top of 
-```prompt-toolkit``` or even tab based completion using ```readline``` won't function.
+```git-coco``` was born because the default hook environment provides a very minimal tty where cool features like
+ autocomplete built on top of ```prompt-toolkit``` or even tab based completion using ```readline``` won't function.
 Here are my queries on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
