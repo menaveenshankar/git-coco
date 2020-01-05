@@ -33,12 +33,14 @@ and you are good to go! Happy collaborative coding :)
 from the repo.
 
 ## How-to
-* ```git-coco``` (**Autocomplete version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
+* ```git-coco``` (**Autocomplete version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action.
+ **Key bindings** - Select using ```TAB``` or ```up-arrow/down-arrow``` key.
+ ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
  or their email ids.
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
  **Autosuggest** co-author groups - if a bunch of you repeatedly work together, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
- of the autosuggest feature based on history to circumvent this.
+ of the autosuggest feature based on history to circumvent this. **Key bindings** - Select using ```right-arrow``` key.
  e.g. if Batman and Superman work together on multiple commits, then for the next commit you only need to type Batman. The autosuggest feature
  automatically suggests Superman which can be completed with the ```right-arrow``` key. The autosuggest feature works along with the above autocomplete
  feature.
