@@ -12,7 +12,7 @@ Furthermore, adding issue/task/item number is also supported. Check out the scre
 
 ## Setup
 Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
-1. ```./setup.sh``` - installs dependencies and updates ```$PATH```.
+1. ```./setup_githooks.sh``` - installs dependencies and updates ```$PATH```.
 2. ```githooks.sh install <absolute-path-to-your-git-repo>``` : this symlinks the 
 git hooks in this repo to the git repo where you wanna use the git
 hooks. **This step should be done for each repo where you wanna use the hook.**
@@ -33,7 +33,8 @@ from the repo.
 will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember all the initials! :D
 ![coauthor_input](screenshots/coauthor_input.png)
 * ```git-add-authors```: to update ```authors.txt``` run ```git-add-authors```. It takes a list of authors
-in the format specified in ```authors.txt```. e.g. ```git-add-authors "NR: Natasha Romanoff, black-widow" "KM: Krishna Mehra, krrish"```. 
+in the format specified in ```authors.txt```, i.e., ```<author-initials>: <author-full-name>, <author-email-id>```.
+For example, ```git-add-authors "NR: Natasha Romanoff, black-widow" "KM: Krishna Mehra, krrish"```. 
 Only unique initials can be added. The script takes care of checking if the initials are unique.
 
 **NOTE** - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
