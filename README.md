@@ -1,8 +1,13 @@
 # git_coauthors
 If you shied away from collaborative coding just because you had to manually add co-authors,
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
-message. It gets triggered automatically as soon as you hit ```git-coco```.
-Furthermore, adding issue/task/item number is also supported. Check out the screenshots!
+message. It gets triggered automatically as soon as you hit ```git-coco```. Main features-
+* **Autcomplete** enables you to remember other
+important things instead of author details, and **Autosuggest** on top of this makes the process of adding repetitive 
+co-author groups hassle free.
+* Adding issue/task/item number is also supported.
+
+Check out the screenshots!
 
 # Table of Contents
 * [Setup](#Setup)
@@ -29,7 +34,7 @@ from the repo.
 ```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
  or their email ids. **coco** is short for "**co**mmit **co**authors".
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
- **Bonus** - if a bunch of you repeatedly work together, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
+ **Autosuggest** co-author groups - if a bunch of you repeatedly work together, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
  of the autosuggest feature based on history to circumvent this.
  e.g. if Batman and Superman work together on multiple commits, then for the next commit you only need to type Batman. The autosuggest feature
  automatically suggests Superman which can be completed with the ```right-arrow``` key. The autosuggest feature works along with the above autocomplete
