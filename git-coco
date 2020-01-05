@@ -53,7 +53,7 @@ def get_commit_coauthors(coauthors_config):
         co-author use TAB or arrow keys (instead of ENTER).
         example input - TS, SUPERMAN(for Tony Stark and Clark Kent )
         Open ../authors.txt to view the current list of authors for this project.\n""")
-    session = PromptSession(history=FileHistory(coauthors_config['history']))
+    session = PromptSession(history=FileHistory(coauthors_config['history_file']))
     coauthors = session.prompt('[INPUT]: Enter co-author(s) -',
                                completer=author_prompter.suggestions, complete_while_typing=True,
                                validator=author_validator, validate_while_typing=False,
@@ -70,7 +70,7 @@ def _cleanup(config):
     if exists(coco_msg_file):
         remove_path(coco_msg_file)
     # if coauthor history file > 4KB then cleanup history, keep only the most recent
-    coco_hist_file = config['coauthors']['history']
+    coco_hist_file = config['coauthors']['history_file']
     if getsize(coco_hist_file) > 4 * 1024:
         with open(coco_hist_file) as f:
             lines = f.readlines()
