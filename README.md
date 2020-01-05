@@ -12,10 +12,10 @@ Furthermore, adding issue/task/item number is also supported. Check out the scre
 
 ## Setup
 Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
-1. ```./setup_githooks.sh``` - installs dependencies and updates ```$PATH```.
+1. ```./setup_githooks.sh``` - installs dependencies, updates ```$PATH```, and adds an environment variable ```GIT_COCO```
+to bashrc.
 2. ```githooks.sh install <absolute-path-to-your-git-repo>``` : this symlinks the 
-git hooks in this repo to the git repo where you wanna use the git
-hooks. **This step should be done for each repo where you wanna use the hook.**
+git hooks to the git repo where you wanna use them. **This step should be done for each repo where you wanna use the hook.**
 ```githooks.sh``` is in your ```$PATH```, so can be run from anywhere.
 
 and you are good to go! Happy collaborative coding :)
