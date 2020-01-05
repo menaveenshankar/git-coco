@@ -65,6 +65,20 @@ def get_commit_coauthors(coauthors_config):
             f.write(coauths_msg)
 
 
+def _cleanup(config):
+    coco_msg_file = config['coauthors']['coauthors_git_msg_file']
+    if exists(coco_msg_file):
+        remove_path(coco_msg_file)
+    # if coauthor history file > 4KB then cleanup history, keep only the most recent
+    coco_hist_file = config['coauthors']['history']
+    if getsize(coco_hist_file) > 4 * 1024:
+        with open(coco_hist_file) as f:
+            lines = f.readlines()
+        with open(coco_hist_file, 'w') as f:
+            # last 3 lines contain the recent coauthor info
+            f.writelines(lines[-3:])
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h']:
         print('git-coco takes the same arguments as git commit')
@@ -83,16 +97,4 @@ if __name__ == '__main__':
         gitcommit_call.append(''.join(sys.argv[1:]))
     subprocess.call(gitcommit_call)
 
-    # cleanup
-    coco_msg_file = config['coauthors']['coauthors_git_msg_file']
-    if exists(coco_msg_file):
-        remove_path(coco_msg_file)
-
-    # if coauthor history file > 4KB then cleanup history, keep only the most recent
-    coco_hist_file = config['coauthors']['history']
-    if getsize(coco_hist_file) > 4 * 1024:
-        with open(coco_hist_file) as f:
-            lines = f.readlines()
-        with open(coco_hist_file, 'w') as f:
-            # last 3 lines contain the recent coauthor info
-            f.writelines(lines[-3:])
+    _cleanup(config)
