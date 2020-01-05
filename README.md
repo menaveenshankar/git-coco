@@ -25,10 +25,17 @@ and you are good to go! Happy collaborative coding :)
 from the repo.
 
 ## How-to
-* ```git-coco``` (**Autosuggest version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
-```git commit```. With ```git-coco``` you can avail the cool autosuggest feature. Input can be either author's initials
+* ```git-coco``` (**Autocomplete version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
+```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
  or their email ids. **coco** is short for "**co**mmit **co**authors".
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
+ **Bonus** - if a bunch of you repeatedly work together, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
+ of the autosuggest feature based on history to circumvent this.
+ e.g. if Batman and Superman work together on multiple commits, then for the next commit you only need to type Batman. The autosuggest feature
+ automatically suggests Superman which can be completed with the ```right-arrow``` key. The autosuggest feature works along with the above autocomplete
+ feature.
+ ![autosuggest_coauthor_input](screenshots/autosuggest_history.png)
+ 
 * **Eidetic version**: If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
 will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember all the initials! :D
 ![coauthor_input](screenshots/coauthor_input.png)
@@ -48,13 +55,18 @@ However, if your branch name does not contain the issue number then you will be 
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
-* **authors_file** - ```authors.txt``` usually is project specific and should reside in the parent directory
-                                   of hooks. However, if several projects share the author list then this path can be
-                                   accordingly adjusted.
+### mutable
 * **domain** - the domain of your organization. e.g. gmail.com
 * **issue_url_base** - if you are using frameworks like jira or codebeamer for tracking tasks,
                        then you can set the base url. Only one issue number per commit is supported currently. However, more can be manually added by amending the commit.
 * **use_issue_in_msg** - set it to False if issue number in commit message is not needed. Default is True.
+
+### immutable paths (preferably, edit only if necessary)
+* **authors_file** - ```authors.txt``` usually is project specific and should reside in the parent directory
+                                   of hooks. However, if several projects share the author list then this path can be
+                                   accordingly adjusted.
+* **coauthors_git_msg_file** - ```.coauthors.tmp``` is used to store the co-author message temporarily. This resides under the home directory.
+* **history** - ```.git_coco_history``` is used to store the history of co-authors, resides under the home directory.
 
 ##
 How the final commit message looks like:
