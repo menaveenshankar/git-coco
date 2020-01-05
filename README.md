@@ -1,7 +1,9 @@
 # git_coauthors
 If you shied away from collaborative coding just because you had to manually add co-authors,
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
-message. It gets triggered automatically as soon as you hit ```git-coco```. Main features-
+message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
+
+Main features-
 * **Autcomplete** enables you to remember other
 important things instead of author details, and **Autosuggest** on top of this makes the process of adding repetitive 
 co-author groups hassle free.
@@ -14,6 +16,7 @@ Check out the screenshots!
 * [How to use](#how-to)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
+* [Why git-coco](#why-coco)
 
 ## Setup
 Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
@@ -32,7 +35,7 @@ from the repo.
 ## How-to
 * ```git-coco``` (**Autocomplete version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
- or their email ids. **coco** is short for "**co**mmit **co**authors".
+ or their email ids.
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
  **Autosuggest** co-author groups - if a bunch of you repeatedly work together, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
  of the autosuggest feature based on history to circumvent this.
@@ -85,3 +88,11 @@ Latest version is always the topmost tag in the following list:
 * **v2.1** - single script to install/uninstall git hooks
 * **v2.0** - added autocomplete version
 * **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
+
+## Why coco
+Why not wrap it completely in prepare-commit-msg and just use vanilla git commit
+```git-coco``` was born because the default hook environment provides a very minimal tty where features built on top
+```prompt-toolkit``` or even tab based completion using```readline``` won't function.
+Here are my queries on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
+[stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
+
