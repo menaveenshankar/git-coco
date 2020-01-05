@@ -76,6 +76,7 @@ How the final commit message looks like:
 
 ## Version Tags
 Latest version is always the topmost tag in the following list:
+* **v2.2** - autosuggest frequently occuring coauthor groups
 * **v2.1** - single script to install/uninstall git hooks
-* **v2.0** - added autosuggest version
+* **v2.0** - added autocomplete version
 * **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
