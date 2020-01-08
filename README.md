@@ -1,14 +1,22 @@
 # git_coauthors
 If you shied away from collaborative coding just because you had to manually add co-authors,
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
-message. It gets triggered automatically as soon as you hit ```git-coco```.
-Furthermore, adding issue/task/item number is also supported. Check out the screenshots!
+message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
+
+Main features-
+* **Autcomplete** enables you to remember other
+important things instead of author details, and **Autosuggest** on top of this makes the process of adding repetitive 
+co-author groups hassle free.
+* Adding issue/task/item number is also supported.
+
+Check out the screenshots!
 
 # Table of Contents
 * [Setup](#Setup)
 * [How to use](#how-to)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
+* [Why git-coco](#why-coco)
 
 ## Setup
 Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
@@ -25,10 +33,20 @@ and you are good to go! Happy collaborative coding :)
 from the repo.
 
 ## How-to
-* ```git-coco``` (**Autosuggest version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action. ```git-coco``` takes the same arguments as
-```git commit```. With ```git-coco``` you can avail the cool autosuggest feature. Input can be either author's initials
- or their email ids. **coco** is short for "**co**mmit **co**authors".
+* ```git-coco``` (**Autocomplete version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action.
+ ```git-coco``` takes the same arguments as
+```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
+ or their email ids. **Key bindings** - Select using ```TAB``` or ```up-arrow/down-arrow``` key.
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
+ 
+  **Autosuggest** co-author groups - if a bunch of you repeatedly work together, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
+ of the autosuggest feature based on history to circumvent this. **Key bindings** - Select using ```right-arrow``` key.
+ 
+  e.g. if Batman and Superman work together on multiple commits, then for the next commit you only need to type Batman. The autosuggest feature
+ automatically suggests Superman which can be completed with the ```right-arrow``` key. The autosuggest feature works along with the above autocomplete
+ feature.
+ ![autosuggest_coauthor_input](screenshots/autosuggest_history.png)
+ 
 * **Eidetic version**: If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
 will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember all the initials! :D
 ![coauthor_input](screenshots/coauthor_input.png)
@@ -48,13 +66,18 @@ However, if your branch name does not contain the issue number then you will be 
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
-* **authors_file** - ```authors.txt``` usually is project specific and should reside in the parent directory
-                                   of hooks. However, if several projects share the author list then this path can be
-                                   accordingly adjusted.
+### mutable (edit these)
 * **domain** - the domain of your organization. e.g. gmail.com
 * **issue_url_base** - if you are using frameworks like jira or codebeamer for tracking tasks,
                        then you can set the base url. Only one issue number per commit is supported currently. However, more can be manually added by amending the commit.
 * **use_issue_in_msg** - set it to False if issue number in commit message is not needed. Default is True.
+
+### immutable paths (preferably, edit only if necessary)
+* **authors_file** - ```authors.txt``` usually is project specific and should reside in the parent directory
+                                   of hooks. However, if several projects share the author list then this path can be
+                                   accordingly adjusted.
+* **coauthors_git_msg_file** - ```.coauthors.tmp``` is used to store the co-author message temporarily. This resides under the home directory.
+* **history_file** - ```.git_coco_history``` is used to store the history of co-authors, resides under the home directory.
 
 ##
 How the final commit message looks like:
@@ -64,6 +87,15 @@ How the final commit message looks like:
 
 ## Version Tags
 Latest version is always the topmost tag in the following list:
+* **v2.2** - autosuggest frequently occuring coauthor groups
 * **v2.1** - single script to install/uninstall git hooks
-* **v2.0** - added autosuggest version
+* **v2.0** - added autocomplete version
 * **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
+
+## Why coco
+Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git commit?
+```git-coco``` was born because the default hook environment provides a very minimal tty where cool features like
+ autocomplete built on top of ```prompt-toolkit``` or even tab based completion using ```readline``` won't function.
+Here are my queries on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
+[stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
+

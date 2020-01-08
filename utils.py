@@ -6,7 +6,8 @@ config = {
     'coauthors': {
         'authors_file': join_path(dirname(__file__), 'authors.txt'),
         'coauthors_git_msg_file': join_path(getenv('HOME'), '.coauthors.tmp'),
-        'domain': 'superhero.universe'
+        'domain': 'superhero.universe',
+        'history_file': join_path(getenv('HOME'), '.git_coco_history')
     },
     'issue': {
         'issue_url_base': 'https://superhero-jira.net/',
