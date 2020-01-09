@@ -1,11 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from time import sleep
 from utils import read_authors_file_as_dict
 from os.path import exists
 import sys
 
 
-class CommitMessage(ABC):
+class CommitMessage(object):
     def __init__(self):
         self._message = ""
 
@@ -13,6 +13,10 @@ class CommitMessage(ABC):
     @abstractmethod
     def message(self):
         return self._message
+
+    @message.setter
+    def message(self, msg):
+        self._message = msg
 
 
 class CoauthorsCommitMessage(CommitMessage):
