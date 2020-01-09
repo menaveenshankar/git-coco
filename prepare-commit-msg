@@ -1,26 +1,17 @@
 #!/usr/bin/env python3
 
 import sys
-from os.path import dirname, abspath, exists
+from os.path import dirname, abspath
 from os.path import join as join_path
-from utils import read_authors_file_as_dict, config
-from commit_message import CoauthorsCommitMessage, IssueNumberCommitMessage
+from utils import config
+from commit_message import ReadCoauthorMessageWrapper, IssueNumberCommitMessage
 from git import Repo
 
 
 class PrepareCommitMessage(object):
-    def __init__(self, config):
-        githooks_dir = dirname(abspath(__file__))
+    def __init__(self, githooks_dir):
         self.repo = Repo(PrepareCommitMessage.hook_git_path(githooks_dir))
-        self._config_coauthors = config['coauthors']
-        self._config_issue = config['issue']
-        self.coauthors_msg = self.issue_number = ""
-
-    def fill_messages(self):
-        self.issue_number = IssueNumberCommitMessage(self.repo, self._config_issue).message
-        git_coco_msg_file = self._config_coauthors['coauthors_git_msg_file']
-        self.coauthors_msg = self.read_authors_msg_autosuggest(git_coco_msg_file) if exists(
-            git_coco_msg_file) else self.read_authors_msg_eidetic(self._config_coauthors['authors_file'])
+        self.message_list = []
 
     @staticmethod
     def hook_git_path(hookdir_path):
@@ -33,25 +24,9 @@ class PrepareCommitMessage(object):
             base_path = join_path(base_path, submodule_name[-2])
         return base_path
 
-    def input_coauthor_initials(self):
-        sys.stdin = open('/dev/tty', 'r')
-        coauthors = input(
-            """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
-            example input - ts, ck (for Tony Stark and Clark Kent )
-            Open ../authors.txt to view the current list of authors for this project.
-            \n[INPUT]: Enter co-author(s) initials: """)
-        return coauthors
-
-    def read_authors_msg_eidetic(self, authors_file):
-        coauths_csv = self.input_coauthor_initials()
-        authors_dict = read_authors_file_as_dict(authors_file)
-        coco_msg = CoauthorsCommitMessage(coauths_csv, authors_dict, self._config_coauthors)
-        return coco_msg.message
-
-    def read_authors_msg_autosuggest(self, git_coco_msg_file):
-        with open(git_coco_msg_file) as f:
-            coauths_msg = f.read()
-        return coauths_msg
+    def fill_messages(self, config):
+        self.message_list.append(ReadCoauthorMessageWrapper(config['coauthors']))
+        self.message_list.append(IssueNumberCommitMessage(self.repo, config['issue']))
 
 
 def prepare_message(commit_msg_filepath, config):
@@ -69,12 +44,14 @@ def prepare_message(commit_msg_filepath, config):
 
     # comments
     """
-    commit_msg = PrepareCommitMessage(config)
-    commit_msg.fill_messages()
-    write_commit_message(commit_msg_filepath, commit_msg.coauthors_msg, commit_msg.issue_number)
+    githooks_dir = dirname(abspath(__file__))
+    commit_msg = PrepareCommitMessage(githooks_dir)
+    commit_msg.fill_messages(config)
+    write_commit_message(commit_msg_filepath, commit_msg.message_list)
 
 
-def write_commit_message(commit_msg_filepath, *messages):
+def write_commit_message(commit_msg_filepath, message_list):
+    messages = [msg_type.message for msg_type in message_list if hasattr(msg_type, 'message')]
     user_def_msg = ''.join(messages)
     with open(commit_msg_filepath, 'r+') as f:
         msg = f.readlines()
