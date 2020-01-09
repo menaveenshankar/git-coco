@@ -74,12 +74,16 @@ def prepare_message(commit_msg_filepath, config):
     commit_msg = PrepareCommitMessage(config)
     commit_msg.fill_coauthors()
     commit_msg.fill_issue_number()
+    write_commit_message(commit_msg_filepath, commit_msg.coauthors_msg, commit_msg.issue_number)
 
+
+def write_commit_message(commit_msg_filepath, *messages):
+    user_def_msg = ''.join(messages)
     with open(commit_msg_filepath, 'r+') as f:
         msg = f.readlines()
         f.seek(0, 0)
         # first line of variable msg is already filled if git commit -m "<msg>" is executed
-        f.write("{}{}{}{}".format(msg[0], commit_msg.issue_number, commit_msg.coauthors_msg, ''.join(msg[1:])))
+        f.write("{}{}{}".format(msg[0], user_def_msg, ''.join(msg[1:])))
 
 
 if __name__ == '__main__':
