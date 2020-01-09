@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from time import sleep
+from utils import read_authors_file_as_dict
+from os.path import exists
 import sys
 
 
@@ -51,6 +53,39 @@ class CoauthorsCommitMessage(CommitMessage):
             coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
             # git expects co-authors after two blank lines
             return '\n\n' + '\n'.join(coauths_str) + '\n\n'
+
+
+class ReadCoauthorMessageWrapper(CommitMessage):
+    def __init__(self, config):
+        self._config_coauthors = config
+
+    def input_coauthor_initials(self):
+        sys.stdin = open('/dev/tty', 'r')
+        coauthors = input(
+            """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
+            example input - ts, ck (for Tony Stark and Clark Kent )
+            Open ../authors.txt to view the current list of authors for this project.
+            \n[INPUT]: Enter co-author(s) initials: """)
+        return coauthors
+
+    def read_authors_msg_eidetic(self, authors_file):
+        coauths_csv = self.input_coauthor_initials()
+        authors_dict = read_authors_file_as_dict(authors_file)
+        self._message = CoauthorsCommitMessage(coauths_csv, authors_dict, self._config_coauthors).message
+
+    def read_authors_msg_autosuggest(self, git_coco_msg_file):
+        with open(git_coco_msg_file) as f:
+            coauths_msg = f.read()
+        self._message = coauths_msg
+
+    @property
+    def message(self):
+        git_coco_msg_file = self._config_coauthors['coauthors_git_msg_file']
+        if exists(git_coco_msg_file):
+            self.read_authors_msg_autosuggest(git_coco_msg_file)
+        else:
+            self.read_authors_msg_eidetic(self._config_coauthors['authors_file'])
+        return self._message
 
 
 class IssueNumberCommitMessage(CommitMessage):
