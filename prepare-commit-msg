@@ -16,10 +16,8 @@ class PrepareCommitMessage(object):
         self._config_issue = config['issue']
         self.coauthors_msg = self.issue_number = ""
 
-    def fill_issue_number(self):
+    def fill_messages(self):
         self.issue_number = IssueNumberCommitMessage(self.repo, self._config_issue).message
-
-    def fill_coauthors(self):
         git_coco_msg_file = self._config_coauthors['coauthors_git_msg_file']
         self.coauthors_msg = self.read_authors_msg_autosuggest(git_coco_msg_file) if exists(
             git_coco_msg_file) else self.read_authors_msg_eidetic(self._config_coauthors['authors_file'])
@@ -72,8 +70,7 @@ def prepare_message(commit_msg_filepath, config):
     # comments
     """
     commit_msg = PrepareCommitMessage(config)
-    commit_msg.fill_coauthors()
-    commit_msg.fill_issue_number()
+    commit_msg.fill_messages()
     write_commit_message(commit_msg_filepath, commit_msg.coauthors_msg, commit_msg.issue_number)
 
 
