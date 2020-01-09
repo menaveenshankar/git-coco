@@ -3,7 +3,7 @@ If you shied away from collaborative coding just because you had to manually add
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
-Main features-
+Main features (TL; DR)-
 * **Autcomplete** enables you to remember other
 important things instead of author details, and **Autosuggest** on top of this makes the process of adding repetitive 
 co-author groups hassle free.
@@ -16,6 +16,7 @@ Check out the screenshots!
 * [How to use](#how-to)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
+* [Extendable interface for programmers](#extendable-interface)
 * [Why git-coco](#why-coco)
 
 ## Setup
@@ -85,17 +86,29 @@ How the final commit message looks like:
 
 **NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
+
+## Extendable Interface
+If you want to add your own message type on top of coauthors (like the issue number) then,
+1. simply add a custom class derived from ```CommitMessage``` in ```commit_message.py```.
+You should override the property ```message``` which returns a string.
+2. add a call to your custom class in ```fill_messages``` function in ```prepare-commit-msg```.
+Your call should be under ```extend()``` at the appropriate place respecting the message format
+as mentioned in the documenation of ```fill_messages```
+
+
 ## Version Tags
 Latest version is always the topmost tag in the following list:
+* **v2.3** - refactor code to have extendable interface for custom message types
 * **v2.2** - autosuggest frequently occuring coauthor groups
 * **v2.1** - single script to install/uninstall git hooks
 * **v2.0** - added autocomplete version
 * **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
 
+
 ## Why coco
 Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git commit?
 ```git-coco``` was born because the default hook environment provides a very minimal tty where cool features like
  autocomplete built on top of ```prompt-toolkit``` or even tab based completion using ```readline``` won't function.
-Here are my queries on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
+Here are my queries regarding ```tty``` on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
