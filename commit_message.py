@@ -44,7 +44,7 @@ class CoauthorsCommitMessage(CommitMessage):
     @property
     def message(self):
         if not self._coauthors:
-            return '\n'
+            self._message = '\n'
         else:
             prefix_str = 'Co-authored-by: {}'
             _coauth_fmt = lambda x: '{} <{}@{}>'.format(x[0].strip(), x[1].strip(), self._config['domain'])
@@ -52,7 +52,8 @@ class CoauthorsCommitMessage(CommitMessage):
             coauths_lst = self._get_coauthor_name_email()
             coauths_str = [prefix_str.format(_coauth_fmt(x)) for x in coauths_lst]
             # git expects co-authors after two blank lines
-            return '\n\n' + '\n'.join(coauths_str) + '\n\n'
+            self._message = '\n\n' + '\n'.join(coauths_str) + '\n\n'
+        return self._message
 
 
 class ReadCoauthorMessageWrapper(CommitMessage):
@@ -115,6 +116,6 @@ class IssueNumberCommitMessage(CommitMessage):
     def message(self):
         if self._issue_number:
             issue_url = self._config_issue['issue_url_base'] + self._issue_number
-            self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
+            self._message = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
 
-        return self._issue_number
+        return self._message
