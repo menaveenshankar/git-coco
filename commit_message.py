@@ -39,7 +39,7 @@ class CoauthorsCommitMessage(CommitMessage):
         return [self.authors_dict[x.strip().upper()].split(',') for x in self._coauthors]
 
     @property
-    def co_authors(self):
+    def message(self):
         if not self._coauthors:
             return '\n'
         else:
