@@ -112,3 +112,5 @@ Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git 
 Here are my queries regarding ```tty``` on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
+Other co-author tools like ```git-mob``` rely exclusively on author initials. Such tools would not
+scale well with the number of authors in the database. 
