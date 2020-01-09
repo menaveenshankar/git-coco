@@ -4,13 +4,18 @@ import sys
 from os.path import dirname, abspath
 from os.path import join as join_path
 from utils import config
-from commit_message import ReadCoauthorMessageWrapper, IssueNumberCommitMessage
+from commit_message import ReadCoauthorMessageWrapper, IssueNumberCommitMessage, CommitMessage
 from git import Repo
+
+# typedef
+CommitSummaryMessage = CommitMessage
+CommitCommentsMessage = CommitMessage
 
 
 class PrepareCommitMessage(object):
-    def __init__(self, githooks_dir):
+    def __init__(self, githooks_dir, file_msg):
         self.repo = Repo(PrepareCommitMessage.hook_git_path(githooks_dir))
+        self.file_msg = file_msg
         self.message_list = []
 
     @staticmethod
@@ -25,39 +30,45 @@ class PrepareCommitMessage(object):
         return base_path
 
     def fill_messages(self, config):
-        self.message_list.append(ReadCoauthorMessageWrapper(config['coauthors']))
-        self.message_list.append(IssueNumberCommitMessage(self.repo, config['issue']))
+        """
+            prepares the message in the format:
+
+            commit summary
+
+            <optional body>
+            Issue: xxxxx
+            <issue_url>/xxxxx
+
+
+            Co-authored-by: A B <A.B@company.domain>
+
+            # comments
+        """
+        self.message_list.append(CommitSummaryMessage(self.file_msg[0]))
+        # start of custom message types
+        self.message_list.extend([
+            ReadCoauthorMessageWrapper(config['coauthors']),
+            IssueNumberCommitMessage(self.repo, config['issue'])
+        ])
+        # end of custom message types
+        self.message_list.append(CommitCommentsMessage(''.join(self.file_msg[1:])))
 
 
 def prepare_message(commit_msg_filepath, config):
-    """
-    prepares the message in the format:
-
-    commit summary
-
-    <optional body>
-    Issue: xxxxx
-    <issue_url>/xxxxx
-
-
-    Co-authored-by: A B <A.B@company.domain>
-
-    # comments
-    """
+    with open(commit_msg_filepath, 'r') as f:
+        msg = f.readlines()
     githooks_dir = dirname(abspath(__file__))
-    commit_msg = PrepareCommitMessage(githooks_dir)
+    commit_msg = PrepareCommitMessage(githooks_dir, msg)
     commit_msg.fill_messages(config)
     write_commit_message(commit_msg_filepath, commit_msg.message_list)
 
 
 def write_commit_message(commit_msg_filepath, message_list):
     messages = [msg_type.message for msg_type in message_list if hasattr(msg_type, 'message')]
-    user_def_msg = ''.join(messages)
-    with open(commit_msg_filepath, 'r+') as f:
-        msg = f.readlines()
-        f.seek(0, 0)
+    complete_msg = ''.join(messages)
+    with open(commit_msg_filepath, 'w') as f:
         # first line of variable msg is already filled if git commit -m "<msg>" is executed
-        f.write("{}{}{}".format(msg[0], user_def_msg, ''.join(msg[1:])))
+        f.write(complete_msg)
 
 
 if __name__ == '__main__':
