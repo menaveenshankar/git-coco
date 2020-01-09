@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from time import sleep
+import sys
 
 
 class CommitMessage(ABC):
@@ -53,5 +54,32 @@ class CoauthorsCommitMessage(CommitMessage):
 
 
 class IssueNumberCommitMessage(CommitMessage):
-    def __init__(self):
+    def __init__(self, repo, config):
         super(IssueNumberCommitMessage, self).__init__()
+        self.repo = repo
+        self._config_issue = config
+        self._issue_number = self.parse_issue_number_from_branch() if self._config_issue['use_issue_in_msg'] else ""
+
+    def parse_issue_number_from_branch(self):
+        if self.repo.head.is_detached:  return ''
+        issue_number = IssueNumberCommitMessage.is_issue_number_in_branch(self.repo.active_branch.name)
+        # if issue number is part of the branch name
+        if issue_number is None:
+            sys.stdin = open('/dev/tty', 'r')
+            issue_number = str(input('[INPUT]: Enter issue number (optional): '))
+
+        return issue_number
+
+    @staticmethod
+    def is_issue_number_in_branch(active_branch):
+        # check if branch ends with "_issuexxxxx" where xxxxx is the issue number
+        issue_number = active_branch.lower().split('_')[-1]
+        return issue_number[2:] if 'issue' in issue_number else None
+
+    @property
+    def message(self):
+        if self._issue_number:
+            issue_url = self._config_issue['issue_url_base'] + self._issue_number
+            self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
+
+        return self._issue_number
