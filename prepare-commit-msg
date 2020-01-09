@@ -4,20 +4,20 @@ import sys
 from os.path import dirname, abspath, exists
 from os.path import join as join_path
 from utils import read_authors_file_as_dict, config
-from coauthors_commit_msg import CoauthorsCommitMsg
+from commit_message import CoauthorsCommitMessage, IssueNumberCommitMessage
 from git import Repo
 
 
-class CommitMsg(object):
+class PrepareCommitMessage(object):
     def __init__(self, config):
         githooks_dir = dirname(abspath(__file__))
-        self.repo = Repo(CommitMsg.hook_git_path(githooks_dir))
+        self.repo = Repo(PrepareCommitMessage.hook_git_path(githooks_dir))
         self._config_coauthors = config['coauthors']
         self._config_issue = config['issue']
-        self.coauthors_msg = self._issue_number = ""
+        self.coauthors_msg = self.issue_number = ""
 
     def fill_issue_number(self):
-        self._issue_number = self.parse_issue_number_from_branch() if self._config_issue['use_issue_in_msg'] else ""
+        self.issue_number = IssueNumberCommitMessage(self.repo, self._config_issue).message
 
     def fill_coauthors(self):
         git_coco_msg_file = self._config_coauthors['coauthors_git_msg_file']
@@ -35,30 +35,6 @@ class CommitMsg(object):
             base_path = join_path(base_path, submodule_name[-2])
         return base_path
 
-    def parse_issue_number_from_branch(self):
-        if self.repo.head.is_detached:  return ''
-        issue_number = CommitMsg.is_issue_number_in_branch(self.repo.active_branch.name)
-        # if issue number is part of the branch name
-        if issue_number is None:
-            sys.stdin = open('/dev/tty', 'r')
-            issue_number = str(input('[INPUT]: Enter issue number (optional): '))
-
-        return issue_number
-
-    @staticmethod
-    def is_issue_number_in_branch(active_branch):
-        # check if branch ends with "_issuexxxxx" where xxxxx is the issue number
-        issue_number = active_branch.lower().split('_')[-1]
-        return issue_number[2:] if 'issue' in issue_number else None
-
-    @property
-    def issue_number(self):
-        if self._issue_number:
-            issue_url = self._config_issue['issue_url_base'] + self._issue_number
-            self._issue_number = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
-
-        return self._issue_number
-
     def input_coauthor_initials(self):
         sys.stdin = open('/dev/tty', 'r')
         coauthors = input(
@@ -71,8 +47,8 @@ class CommitMsg(object):
     def read_authors_msg_eidetic(self, authors_file):
         coauths_csv = self.input_coauthor_initials()
         authors_dict = read_authors_file_as_dict(authors_file)
-        coco_msg = CoauthorsCommitMsg(coauths_csv, authors_dict, self._config_coauthors)
-        return coco_msg.co_authors
+        coco_msg = CoauthorsCommitMessage(coauths_csv, authors_dict, self._config_coauthors)
+        return coco_msg.message
 
     def read_authors_msg_autosuggest(self, git_coco_msg_file):
         with open(git_coco_msg_file) as f:
@@ -95,7 +71,7 @@ def prepare_message(commit_msg_filepath, config):
 
     # comments
     """
-    commit_msg = CommitMsg(config)
+    commit_msg = PrepareCommitMessage(config)
     commit_msg.fill_coauthors()
     commit_msg.fill_issue_number()
 
