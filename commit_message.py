@@ -6,8 +6,8 @@ import sys
 
 
 class CommitMessage(object):
-    def __init__(self):
-        self._message = ""
+    def __init__(self, msg):
+        self._message = msg
 
     @property
     @abstractmethod
@@ -21,7 +21,7 @@ class CommitMessage(object):
 
 class CoauthorsCommitMessage(CommitMessage):
     def __init__(self, coauthors, authors_dict, config_coauthors):
-        super(CoauthorsCommitMessage, self).__init__()
+        super(CoauthorsCommitMessage, self).__init__("")
         self._coauthors = self.non_empty_coauthors_list(coauthors)
         self._config = config_coauthors
         self.authors_dict = authors_dict
@@ -62,6 +62,7 @@ class CoauthorsCommitMessage(CommitMessage):
 
 class ReadCoauthorMessageWrapper(CommitMessage):
     def __init__(self, config):
+        super(ReadCoauthorMessageWrapper, self).__init__("")
         self._config_coauthors = config
 
     def input_coauthor_initials(self):
@@ -95,7 +96,7 @@ class ReadCoauthorMessageWrapper(CommitMessage):
 
 class IssueNumberCommitMessage(CommitMessage):
     def __init__(self, repo, config):
-        super(IssueNumberCommitMessage, self).__init__()
+        super(IssueNumberCommitMessage, self).__init__("")
         self.repo = repo
         self._config_issue = config
         self._issue_number = self.parse_issue_number_from_branch() if self._config_issue['use_issue_in_msg'] else ""
