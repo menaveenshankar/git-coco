@@ -1,9 +1,15 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from time import sleep
+
 
 class CommitMessage(ABC):
     def __init__(self):
-        self.message = ""
+        self._message = ""
+
+    @property
+    @abstractmethod
+    def message(self):
+        return self._message
 
 
 class CoauthorsCommitMessage(CommitMessage):
