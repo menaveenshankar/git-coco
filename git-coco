@@ -11,7 +11,7 @@ from prompt_toolkit.validation import Validator, ValidationError
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from utils import read_authors_file_as_dict, config
-from coauthors_commit_msg import CoauthorsCommitMsg
+from commit_message import CoauthorsCommitMessage
 
 
 class AuthorValidator(Validator):
@@ -59,7 +59,7 @@ def get_commit_coauthors(coauthors_config):
                                validator=author_validator, validate_while_typing=False,
                                auto_suggest=AutoSuggestFromHistory()
                                )
-    coauths_msg = CoauthorsCommitMsg(coauthors, author_prompter.authors_dict, coauthors_config).co_authors
+    coauths_msg = CoauthorsCommitMessage(coauthors, author_prompter.authors_dict, coauthors_config).message
     if coauths_msg:
         with open(coauthors_config['coauthors_git_msg_file'], 'w') as f:
             f.write(coauths_msg)
