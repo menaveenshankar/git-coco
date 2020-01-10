@@ -4,8 +4,8 @@ then this script will definitely calm your nerves. A simple git hook (in python3
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
 Main features (TL; DR)-
-* **Autcomplete** enables you to remember other
-important things instead of author details, and **Autosuggest** on top of this makes the process of adding repetitive 
+* **Autcomplete** (keys - TAB, ↑, ↓) enables you to remember other
+important things instead of author details, and **Autosuggest** (key →) on top of this makes the process of adding repetitive 
 co-author groups hassle free.
 * Adding issue/task/item number is also supported.
 
