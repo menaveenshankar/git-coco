@@ -5,7 +5,7 @@ message. It gets triggered automatically as soon as you hit ```git-coco```. **co
 
 Main features (TL; DR)-
 * ```git-coco``` instead of ```git commit```
-* Supports **Autcomplete** (keys - TAB, ↑, ↓) enables you to remember other
+* Supports **Autcomplete** (keys - TAB, ↑, ↓) which enables you to remember other
 important things instead of author details, and **Autosuggest** (key →) on top of this makes the process of adding repetitive 
 co-author groups hassle free.
 * Supports issue/task/item number as part of the commit message.
