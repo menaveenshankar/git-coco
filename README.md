@@ -4,10 +4,11 @@ then this script will definitely calm your nerves. A simple git hook (in python3
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
 Main features (TL; DR)-
-* **Autcomplete** (keys - TAB, ↑, ↓) enables you to remember other
+* ```git-coco``` instead of ```git commit```
+* Supports **Autcomplete** (keys - TAB, ↑, ↓) enables you to remember other
 important things instead of author details, and **Autosuggest** (key →) on top of this makes the process of adding repetitive 
 co-author groups hassle free.
-* Adding issue/task/item number is also supported.
+* Supports issue/task/item number as part of the commit message.
 
 Check out the screenshots!
 
