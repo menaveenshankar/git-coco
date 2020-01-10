@@ -44,11 +44,12 @@ class PrepareCommitMessage(object):
 
             # comments
         """
+        # first line of variable msg is already filled if git commit -m "<msg>" is executed
         self.message_list.append(CommitSummaryMessage(self.file_msg[0]))
         # start of custom message types
         self.message_list.extend([
-            ReadCoauthorMessageWrapper(config['coauthors']),
-            IssueNumberCommitMessage(self.repo, config['issue'])
+            IssueNumberCommitMessage(self.repo, config['issue']),
+            ReadCoauthorMessageWrapper(config['coauthors'])
         ])
         # end of custom message types
         self.message_list.append(CommitCommentsMessage(''.join(self.file_msg[1:])))
@@ -67,7 +68,6 @@ def write_commit_message(commit_msg_filepath, message_list):
     messages = [msg_type.message for msg_type in message_list if hasattr(msg_type, 'message')]
     complete_msg = ''.join(messages)
     with open(commit_msg_filepath, 'w') as f:
-        # first line of variable msg is already filled if git commit -m "<msg>" is executed
         f.write(complete_msg)
 
 
