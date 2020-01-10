@@ -64,6 +64,7 @@ class ReadCoauthorMessageWrapper(CommitMessage):
     def __init__(self, config):
         super(ReadCoauthorMessageWrapper, self).__init__("")
         self._config_coauthors = config
+        self.read_authors_msg()
 
     def input_coauthor_initials(self):
         sys.stdin = open('/dev/tty', 'r')
@@ -74,23 +75,25 @@ class ReadCoauthorMessageWrapper(CommitMessage):
             \n[INPUT]: Enter co-author(s) initials: """)
         return coauthors
 
-    def read_authors_msg_eidetic(self, authors_file):
+    def _read_authors_msg_eidetic(self, authors_file):
         coauths_csv = self.input_coauthor_initials()
         authors_dict = read_authors_file_as_dict(authors_file)
         self._message = CoauthorsCommitMessage(coauths_csv, authors_dict, self._config_coauthors).message
 
-    def read_authors_msg_autosuggest(self, git_coco_msg_file):
+    def _read_authors_msg_autosuggest(self, git_coco_msg_file):
         with open(git_coco_msg_file) as f:
             coauths_msg = f.read()
         self._message = coauths_msg
 
-    @property
-    def message(self):
+    def read_authors_msg(self):
         git_coco_msg_file = self._config_coauthors['coauthors_git_msg_file']
         if exists(git_coco_msg_file):
-            self.read_authors_msg_autosuggest(git_coco_msg_file)
+            self._read_authors_msg_autosuggest(git_coco_msg_file)
         else:
-            self.read_authors_msg_eidetic(self._config_coauthors['authors_file'])
+            self._read_authors_msg_eidetic(self._config_coauthors['authors_file'])
+
+    @property
+    def message(self):
         return self._message
 
 
@@ -121,6 +124,6 @@ class IssueNumberCommitMessage(CommitMessage):
     def message(self):
         if self._issue_number:
             issue_url = self._config_issue['issue_url_base'] + self._issue_number
-            self._message = '\nItem: {}\n{}\n'.format(self._issue_number, issue_url)
+            self._message = '\nItem: {}\n{}\n\n'.format(self._issue_number, issue_url)
 
         return self._message
