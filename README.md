@@ -21,7 +21,7 @@ Check out the screenshots!
 * [Why git-coco](#why-coco)
 
 ## Setup
-Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
+Adapt ```config``` in ```utils.py``` accordingly (see [Configs](#configs)). Then,
 1. ```./setup_githooks.sh``` - installs dependencies, updates ```$PATH```, and adds an environment variable ```GIT_COCO```
 to bashrc. Restart your terminal after this step.
 2. ```githooks.sh install <absolute-path-to-your-git-repo>``` : this symlinks the 
