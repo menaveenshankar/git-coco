@@ -44,12 +44,14 @@ class PrepareCommitMessage(object):
 
             # comments
         """
+        # coauthors are read first, any other input is an add-on which is read later
+        coauthors = ReadCoauthorMessageWrapper(config['coauthors'])
         # first line of variable msg is already filled if git commit -m "<msg>" is executed
         self.message_list.append(CommitSummaryMessage(self.file_msg[0]))
-        # start of custom message types
+        # start of custom message types, ordered according to the above commit msg format (see function's documentation)
         self.message_list.extend([
             IssueNumberCommitMessage(self.repo, config['issue']),
-            ReadCoauthorMessageWrapper(config['coauthors'])
+            coauthors
         ])
         # end of custom message types
         self.message_list.append(CommitCommentsMessage(''.join(self.file_msg[1:])))
