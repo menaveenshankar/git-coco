@@ -62,9 +62,10 @@ Only unique initials can be added. The script takes care of checking if the init
 
 ### Issue number (additional feature)
 If you are using frameworks like jira or codebeamer for tracking tasks, then you can also add the corresponding task/issue number
-to the commit message. This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number.
+to the commit message (check the screenshots). This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number.
 *The fundamental principle of this feature is to encourage one branch per issue*.
-However, if your branch name does not contain the issue number then you will be prompted to enter it manually. Check the screenshots for an overview.
+However, if your branch name does not contain the issue number then you will be prompted to enter it manually. This feature is an
+example of how to add your own custom messages on top of co-authors (see for [Extendable interface](#extendable-interface) more details). 
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
@@ -113,5 +114,5 @@ Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git 
 Here are my queries regarding ```tty``` on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
-Other co-author tools like ```git-mob``` rely exclusively on author initials. Such tools would not
-scale well with the number of authors in the database. 
+Other co-author tools like ```git-mob``` rely exclusively on author initials. The useability becomes an issue as the number
+of authors in the database increase. Autocomplete in git-coco easily addresses this issue. 
