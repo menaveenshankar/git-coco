@@ -97,7 +97,7 @@ You should override the property ```message``` which returns a string.
 Your call should be under ```extend()``` at the appropriate place respecting the message format
 as mentioned in the documenation of ```fill_messages```
 3. Each custom class should have a flag variable under ```config``` in ```utils.py``` w.r.t useability. All config variables
- for this custom class should reside under its sub-dict, e.g., ```coauthors```, ```issue```.  
+ for this custom class should reside under its respective sub-dict, e.g., ```coauthors```, ```issue```.  
 
 ## Version Tags
 Latest version is always the topmost tag in the following list:
