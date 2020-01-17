@@ -118,7 +118,7 @@ class IssueNumberCommitMessage(CommitMessage):
     def is_issue_number_in_branch(active_branch):
         # check if branch ends with "_issuexxxxx" where xxxxx is the issue number
         issue_number = active_branch.lower().split('_')[-1]
-        return issue_number[2:] if 'issue' in issue_number else None
+        return issue_number[5:] if 'issue' in issue_number else None
 
     @property
     def message(self):
