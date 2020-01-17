@@ -3,11 +3,12 @@ If you shied away from collaborative coding just because you had to manually add
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
-Main features-
-* **Autcomplete** enables you to remember other
-important things instead of author details, and **Autosuggest** on top of this makes the process of adding repetitive 
+Main features (TL; DR)-
+* ```git-coco``` instead of ```git commit```
+* Supports **Autcomplete** (keys - TAB, ↑, ↓) which enables you to remember other
+important things instead of author details, and **Autosuggest** (key →) on top of this makes the process of adding repetitive 
 co-author groups hassle free.
-* Adding issue/task/item number is also supported.
+* Supports issue/task/item number as part of the commit message.
 
 Check out the screenshots!
 
@@ -16,12 +17,13 @@ Check out the screenshots!
 * [How to use](#how-to)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
+* [Extendable interface for programmers](#extendable-interface)
 * [Why git-coco](#why-coco)
 
 ## Setup
-Adapt ```config``` in ```utils.py``` accordingly (see configs section). Then,
+Adapt ```config``` in ```utils.py``` accordingly (see [Configs](#configs)). Then,
 1. ```./setup_githooks.sh``` - installs dependencies, updates ```$PATH```, and adds an environment variable ```GIT_COCO```
-to bashrc.
+to bashrc. Restart your terminal after this step.
 2. ```githooks.sh install <absolute-path-to-your-git-repo>``` : this symlinks the 
 git hooks to the git repo where you wanna use them. **This step should be done for each repo where you wanna use the hook.**
 ```githooks.sh``` is in your ```$PATH```, so can be run from anywhere.
@@ -60,9 +62,10 @@ Only unique initials can be added. The script takes care of checking if the init
 
 ### Issue number (additional feature)
 If you are using frameworks like jira or codebeamer for tracking tasks, then you can also add the corresponding task/issue number
-to the commit message. This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number.
+to the commit message (check the screenshots). This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number.
 *The fundamental principle of this feature is to encourage one branch per issue*.
-However, if your branch name does not contain the issue number then you will be prompted to enter it manually. Check the screenshots for an overview.
+However, if your branch name does not contain the issue number then you will be prompted to enter it manually. This feature is an
+example of how to add your own custom messages on top of co-authors (see for [Extendable interface](#extendable-interface) more details). 
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
@@ -85,17 +88,32 @@ How the final commit message looks like:
 
 **NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
+
+## Extendable Interface
+If you want to add your own message type on top of coauthors (like the issue number) then,
+1. simply add a custom class derived from ```CommitMessage``` in ```commit_message.py```.
+You should override the property ```message``` which returns a string.
+2. add a call to your custom class in ```fill_messages``` function in ```prepare-commit-msg```.
+Your call should be under ```extend()``` at the appropriate place respecting the message format
+as mentioned in the documenation of ```fill_messages```
+3. Each custom class should have a flag variable under ```config``` in ```utils.py``` w.r.t useability. All config variables
+ for this custom class should reside under its respective sub-dict, e.g., ```coauthors```, ```issue```.  
+
 ## Version Tags
 Latest version is always the topmost tag in the following list:
+* **v2.3** - refactor code to have extendable interface for custom message types
 * **v2.2** - autosuggest frequently occuring coauthor groups
 * **v2.1** - single script to install/uninstall git hooks
 * **v2.0** - added autocomplete version
 * **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
 
+
 ## Why coco
 Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git commit?
 ```git-coco``` was born because the default hook environment provides a very minimal tty where cool features like
  autocomplete built on top of ```prompt-toolkit``` or even tab based completion using ```readline``` won't function.
-Here are my queries on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
+Here are my queries regarding ```tty``` on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
+Other co-author tools like ```git-mob``` rely exclusively on author initials. The useability becomes an issue as the number
+of authors in the database increase. Autocomplete in git-coco easily addresses this issue. 
