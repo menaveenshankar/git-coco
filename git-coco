@@ -82,22 +82,25 @@ def _cleanup(config):
     _cleanup_coco_history(config['coauthors']['history_file'])
 
 
+def git_coco(sys_argv):
+    # use autosuggest for correct versions, else the default git commit
+    if sys.version_info >= (3, 6):
+        get_commit_coauthors(config['coauthors'])
+    else:
+        print('[INFO]: Autosuggest version of the hook needs >= python3.6. Reverting back to the (old) eidetic version')
+
+    # call git commit with args if any
+    gitcommit_call = ['git', 'commit']
+    if len(sys_argv) > 1:
+        gitcommit_call.append(''.join(sys_argv[1:]))
+    subprocess.call(gitcommit_call)
+
+    _cleanup(config)
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h']:
         print('git-coco takes the same arguments as git commit')
         exit(0)
 
-    # use autosuggest for correct versions, else the default git commit
-    if sys.version_info >= (3, 6):
-        get_commit_coauthors(config['coauthors'])
-    else:
-        print(
-            '[INFO]: Autosuggest version of the hook runs on >= python3.6. Reverting back to the (old) eidetic version')
-
-    # call git commit with args if any
-    gitcommit_call = ['git', 'commit']
-    if len(sys.argv) > 1:
-        gitcommit_call.append(''.join(sys.argv[1:]))
-    subprocess.call(gitcommit_call)
-
-    _cleanup(config)
+    git_coco(sys.argv)
