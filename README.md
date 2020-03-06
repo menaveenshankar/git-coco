@@ -62,15 +62,18 @@ in the format specified in ```authors.txt```, i.e., ```<author-initials>: <autho
 For example, ```git-add-authors "NR: Natasha Romanoff, black-widow" "KM: Krishna Mehra, krrish"```. 
 Only unique initials can be added. The script takes care of checking if the initials are unique.
 
-**NOTE** - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
-```git commit --amend --no-edit```
-
 ### Issue number (additional feature)
 If you are using frameworks like jira or codebeamer for tracking tasks, then you can also add the corresponding task/issue number
 to the commit message (check the screenshots). This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number.
 *The fundamental principle of this feature is to encourage one branch per issue*.
 However, if your branch name does not contain the issue number then you will be prompted to enter it manually. This feature is an
 example of how to add your own custom messages on top of co-authors (see for [Extendable interface](#extendable-interface) more details). 
+
+##
+How the final commit message looks like:
+![commit_msg](screenshots/commit_msg.png)
+
+**NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
 ## configs
 The following variables under ```config``` in the script should be configured by the user:
@@ -87,11 +90,6 @@ The following variables under ```config``` in the script should be configured by
 * **coauthors_git_msg_file** - ```.coauthors.tmp``` is used to store the co-author message temporarily. This resides under the home directory.
 * **history_file** - ```.git_coco_history``` is used to store the history of co-authors, resides under the home directory.
 
-##
-How the final commit message looks like:
-![commit_msg](screenshots/commit_msg.png)
-
-**NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
 
 ## Extendable Interface
