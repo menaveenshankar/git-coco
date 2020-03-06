@@ -68,7 +68,7 @@ def prepare_message(commit_msg_filepath, config):
 
 def write_commit_message(commit_msg_filepath, message_list):
     messages = [msg_type.message for msg_type in message_list if hasattr(msg_type, 'message')]
-    complete_msg = ''.join(messages)
+    complete_msg = '\n'.join(messages)
     with open(commit_msg_filepath, 'w') as f:
         f.write(complete_msg)
 
