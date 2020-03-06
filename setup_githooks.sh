@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # check if gitpython is installed
-python -c "import git" &> /dev/null;
+python3 -c "import git" &> /dev/null;
 if [ $? -eq 1 ];
 then
   echo "[INFO]: Installing gitpython";
@@ -9,7 +9,7 @@ then
 fi
 
 # check if prompt-toolkit is installed
-python -c "import prompt_toolkit" &> /dev/null;
+python3 -c "import prompt_toolkit" &> /dev/null;
 if [ $? -eq 1 ];
 then
   echo "[INFO]: Installing prompt-toolkit";
