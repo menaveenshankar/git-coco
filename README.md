@@ -1,4 +1,4 @@
-# git_coauthors
+# git-coco (git hook for adding co-authors)
 If you shied away from collaborative coding just because you had to manually add co-authors,
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
