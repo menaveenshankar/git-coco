@@ -37,8 +37,7 @@ fi
 chmod +x ${GIT_COCO}/prepare-commit-msg
 chmod +x ${GIT_COCO}/git-add-authors
 chmod +x ${GIT_COCO}/git-coco
-chmod +x ${GIT_COCO}/install_githooks.sh
-chmod +x ${GIT_COCO}/uninstall_githooks.sh
+chmod +x ${GIT_COCO}/coco.sh
 
 if [ $? -ne 0 ]
 then
