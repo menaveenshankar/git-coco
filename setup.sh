@@ -24,14 +24,15 @@ case "${unameOut}" in
     *)          echo "[INFO]: Supported only on Linux and Mac. For other OSes carry out the following steps manually";;
 esac
 
+# new env variable
+GIT_COCO=$(pwd)/git-coco
 if [[ ! $PATH =~ ${PWD} ]]; then
   printf "\n#githooks to PATH\n" >> ${bashrc_file};
-  printf "export PATH=\$PATH:$(pwd)\n" >> ${bashrc_file};
-  printf "export GIT_COCO=$(pwd)\n" >> ${bashrc_file};
+  printf "export PATH=\$PATH:$GIT_COCO\n" >> ${bashrc_file};
+  printf "export GIT_COCO=$GIT_COCO\n" >> ${bashrc_file};
   echo "[INFO]: updated \$PATH. env var \$GIT_COCO points to $(pwd)"
 fi
 
-GIT_COCO=$(pwd)
 ## setup git hook and scripts
 chmod +x ${GIT_COCO}/prepare-commit-msg
 chmod +x ${GIT_COCO}/git-add-authors
