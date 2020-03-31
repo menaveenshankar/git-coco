@@ -24,9 +24,9 @@ Check out the screenshots!
 Adapt ```config``` in ```utils.py``` accordingly (see [Configs](#configs)). Then,
 1. ```./setup.sh``` - installs dependencies, updates ```$PATH```, and adds an environment variable ```GIT_COCO```
 to bashrc. Restart your terminal after this step.
-2. ```githooks.sh install <absolute-path-to-your-git-repo>``` : this symlinks the 
+2. ```coco.sh install <absolute-path-to-your-git-repo>``` : this symlinks the 
 git hooks to the git repo where you wanna use them. **This step should be done for each repo where you wanna use the hook.**
-```githooks.sh``` is in your ```$PATH```, so can be run from anywhere.
+```coco.sh``` is in your ```$PATH```, so can be run from anywhere.
 
 and you are good to go! Happy collaborative coding :)
 
@@ -36,7 +36,7 @@ and you are good to go! Happy collaborative coding :)
 * cherry pick - ```git cherry-pick <hash>``` triggers ```git commit``` by default, which then triggers the hook. Use ```git cherry-pick -n <hash>``` to avoid that.
 
 ### Uninstall
-```githooks.sh uninstall <absolute-path-to-your-git-repo>```: removes the git hooks
+```coco.sh uninstall <absolute-path-to-your-git-repo>```: removes the git hooks
 from the repo.
 
 ## How-to
