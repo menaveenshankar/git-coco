@@ -24,6 +24,9 @@ case "${unameOut}" in
     *)          echo "[INFO]: Supported only on Linux and Mac. For other OSes carry out the following steps manually";;
 esac
 
+# create author history file for autosuggest
+touch $HOME/.git_coco_history
+
 # new env variable
 GIT_COCO=$(pwd)/git-coco
 if [[ ! $PATH =~ ${PWD} ]]; then
