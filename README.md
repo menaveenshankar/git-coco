@@ -76,7 +76,9 @@ How the final commit message looks like:
 **NOTE** - Coauthors and issue number are optional, the committer can simply hit enter to ignore them.
 
 ## configs
-The following variables under ```config``` in the script should be configured by the user:
+<details>
+<summary>The following variables under ```config``` in the script should be configured by the user: </summary>
+
 ### mutable (edit these)
 * **domain** - the domain of your organization. e.g. gmail.com
 * **issue_url_base** - if you are using frameworks like jira or codebeamer for tracking tasks,
@@ -89,11 +91,13 @@ The following variables under ```config``` in the script should be configured by
                                    accordingly adjusted.
 * **coauthors_git_msg_file** - ```.coauthors.tmp``` is used to store the co-author message temporarily. This resides under the home directory.
 * **history_file** - ```.git_coco_history``` is used to store the history of co-authors, resides under the home directory.
-
+</details>
 
 
 ## Extendable Interface
-If you want to add your own message type on top of coauthors (like the issue number) then,
+<details>
+<summary>If you want to add your own message type on top of coauthors (like the issue number) then, </summary>
+
 1. simply add a custom class derived from ```CommitMessage``` in ```commit_message.py```.
 You should override the property ```message``` which returns a string.
 2. add a call to your custom class in ```fill_messages``` function in ```prepare-commit-msg```.
@@ -101,15 +105,18 @@ Your call should be under ```extend()``` at the appropriate place respecting the
 as mentioned in the documenation of ```fill_messages```
 3. Each custom class should have a flag variable under ```config``` in ```utils.py``` w.r.t useability. All config variables
  for this custom class should reside under its respective sub-dict, e.g., ```coauthors```, ```issue```.  
+</details>
 
 ## Version Tags
-Latest version is always the topmost tag in the following list:
+<details>
+<summary>Latest version is always the topmost tag in the following list:</summary>
+
 * **v2.3** - refactor code to have extendable interface for custom message types
 * **v2.2** - autosuggest frequently occuring coauthor groups
 * **v2.1** - single script to install/uninstall git hooks
 * **v2.0** - added autocomplete version
 * **v1.0** - checkout this tag to just use the eidetic version, i.e., author initials based input
-
+</details>
 
 ## Why coco
 Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git commit?
