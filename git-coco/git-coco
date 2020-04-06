@@ -82,6 +82,13 @@ def _cleanup(config):
     _cleanup_coco_history(config['coauthors']['history_file'])
 
 
+def extract_commit_options(sys_argv):
+    """ extracts vanilla git commit options """
+    split_opts = ' '.join(sys_argv[1:]).split('-')
+    split_opts = ['-' + s.strip() for s in split_opts[1:]]
+    return split_opts
+
+
 def git_coco(sys_argv):
     # use autosuggest for correct versions, else the default git commit
     if sys.version_info >= (3, 6):
@@ -92,7 +99,8 @@ def git_coco(sys_argv):
     # call git commit with args if any
     gitcommit_call = ['git', 'commit']
     if len(sys_argv) > 1:
-        gitcommit_call.append(''.join(sys_argv[1:]))
+        split_opts = extract_commit_options(sys_argv)
+        gitcommit_call.extend(split_opts)
     subprocess.call(gitcommit_call)
 
     _cleanup(config)
