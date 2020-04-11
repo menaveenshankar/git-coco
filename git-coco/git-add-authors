@@ -7,7 +7,8 @@ import sys
 def _remove_duplicates(new_author_dict, authors_file):
     current_authors_dict = read_authors_file(authors_file)
     duplicate_new_authors = list(set(current_authors_dict.keys()).intersection(set(new_author_dict.keys())))
-    print('[INFO]: {} initials already exist. Change and add them again'.format(duplicate_new_authors))
+    if duplicate_new_authors:
+        print('[INFO]: {} initials already exist. Change and add them again'.format(duplicate_new_authors))
     new_author_dict = list(map(new_author_dict.pop, duplicate_new_authors))
     return new_author_dict
 
@@ -19,7 +20,7 @@ def add_new_authors(new_authors, coauthors_config):
     new_authors_list = [':'.join([k, v]) for k, v in new_author_dict.items()]
 
     with open(coauthors_config['authors_file'], 'a') as f:
-        f.write('\n'.join(new_authors_list))
+        f.write('\n'+'\n'.join(new_authors_list))
 
 
 if __name__ == '__main__':
