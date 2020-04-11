@@ -21,6 +21,7 @@ Check out the screenshots!
 * [Available git tags](#version-tags)
 * [Extendable interface for programmers](#extendable-interface)
 * [Why git-coco](#why-coco)
+    * [Comparison to other co-author tools](#comparison-to)
 
 ## Setup
 Adapt ```config``` in ```utils.py``` accordingly (see [Configs](#configs)). Then,
@@ -122,11 +123,14 @@ as mentioned in the documenation of ```fill_messages```
 </details>
 
 ## Why coco
-Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git commit?
-```git-coco``` was born because the default hook environment provides a very minimal tty where cool features like
- autocomplete built on top of ```prompt-toolkit``` or even tab based completion using ```readline``` won't function.
-Here are my queries regarding ```tty``` on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
+Why not wrap it completely in `prepare-commit-msg` and just use vanilla git commit?
+`git-coco` was born because the default hook environment provides a very minimal tty where cool features like
+ autocomplete built on top of `prompt-toolkit` or even tab based completion using `readline` won't function.
+Here are my queries regarding `tty` on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
-Other co-author tools like ```git-mob``` and `git-pair` rely exclusively on author initials. The useability becomes an issue as the number
-of authors in the database increase. Autocomplete in git-coco easily addresses this issue. 
+### Comparison to other coauthor tools:
+* Other co-author tools like `git-mob` and `git-pair` rely exclusively on author initials. The useability becomes an issue as the number
+of authors in the database increase. Autocomplete in git-coco easily addresses this issue.
+* Every commit in `git-coco` can have different set of co-authors which is not supported by `git-mob` and `git-pair`.
+* `git-coco` is written in python3 and is simple to setup.
