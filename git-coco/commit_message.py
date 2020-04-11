@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from time import sleep
-from utils import read_authors_file_as_dict
+from utils import read_authors_file
 from os.path import exists
 import sys
 
@@ -77,7 +77,7 @@ class ReadCoauthorMessageWrapper(CommitMessage):
 
     def _read_authors_msg_eidetic(self, authors_file):
         coauths_csv = self.input_coauthor_initials()
-        authors_dict = read_authors_file_as_dict(authors_file)
+        authors_dict = read_authors_file(authors_file)
         self._message = CoauthorsCommitMessage(coauths_csv, authors_dict, self._config_coauthors).message
 
     def _read_authors_msg_autosuggest(self, git_coco_msg_file):

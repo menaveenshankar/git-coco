@@ -10,7 +10,7 @@ from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import Validator, ValidationError
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from utils import read_authors_file_as_dict, config
+from utils import read_authors_file, config
 from commit_message import CoauthorsCommitMessage
 
 
@@ -28,7 +28,7 @@ class AuthorValidator(Validator):
 
 class AuthorPrompter(object):
     def __init__(self, authors_file):
-        self.authors_dict = read_authors_file_as_dict(authors_file)
+        self.authors_dict = read_authors_file(authors_file)
         email_dict = self._map_email_to_details(self.authors_dict)
         self.authors_dict.update(email_dict)
         self.suggestions = self.populate_prompter()
