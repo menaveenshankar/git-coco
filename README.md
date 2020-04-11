@@ -1,10 +1,10 @@
 # git-coco (git hook for adding co-authors)
 If you shied away from collaborative coding just because you had to manually add co-authors,
-then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
+then this script will definitely calm your nerves. `git-coco` is a simple git hook (in python3) to easily add co-authors to a commit
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
 Main features (TL; DR)-
-* ```git-coco``` instead of ```git commit```
+* Run ```git-coco``` instead of ```git commit```
 * Supports **Autcomplete** (keys - TAB, ↑, ↓) which enables you to remember other
 important things instead of author details, and **Autosuggest** (key →) on top of this makes the process of adding repetitive 
 co-author groups hassle free.
@@ -19,6 +19,7 @@ shells (like `zsh`) then adapt `setup.sh` accordingly.
 * [Setup](#Setup)
     * [When to skip the triggering of hooks](#skip-hooks)
 * [How to use?](#how-to-use)
+    * [Issue number (additional feature)](#issue-number)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
 * [Extendable interface for programmers](#extendable-interface)
@@ -70,7 +71,7 @@ in the format specified in ```authors.txt```, i.e., ```<author-initials>: <autho
 For example, ```git-add-authors "NR: Natasha Romanoff, black-widow" "KM: Krishna Mehra, krrish"```. 
 Only unique initials can be added. The script takes care of checking if the initials are unique.
 
-### Issue number (additional feature)
+### Issue number
 If you are using frameworks like jira or codebeamer for tracking tasks, then you can also add the corresponding task/issue number
 to the commit message (check the screenshots). This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number.
 *The fundamental principle of this feature is to encourage one branch per issue*.
