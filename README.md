@@ -75,7 +75,7 @@ example of how to add your own custom messages on top of co-authors (see for [Ex
 
 ### Skip hooks
 In the following cases, you should skip triggering the hook-
-* `rebase` - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
+* `rebase -i` - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
 ```git commit --amend --no-edit```
 * `cherry-pick` - ```git cherry-pick <hash>``` triggers ```git commit``` by default, which then triggers the hook. Use ```git cherry-pick -n <hash>``` to avoid that.
 
