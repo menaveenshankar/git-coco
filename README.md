@@ -3,6 +3,8 @@ If you shied away from collaborative coding just because you had to manually add
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
+To get started, all you need is a linux or mac computer with `bash` support.
+
 Main features (TL; DR)-
 * ```git-coco``` instead of ```git commit```
 * Supports **Autcomplete** (keys - TAB, ↑, ↓) which enables you to remember other
@@ -126,5 +128,5 @@ Why not wrap it completely in ```prepare-commit-msg``` and just use vanilla git 
 Here are my queries regarding ```tty``` on [github](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1030) and 
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
-Other co-author tools like ```git-mob``` rely exclusively on author initials. The useability becomes an issue as the number
+Other co-author tools like ```git-mob``` and `git-pair` rely exclusively on author initials. The useability becomes an issue as the number
 of authors in the database increase. Autocomplete in git-coco easily addresses this issue. 
