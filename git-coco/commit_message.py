@@ -71,7 +71,7 @@ class ReadCoauthorMessageWrapper(CommitMessage):
         coauthors = input(
             """\n[INFO]: ADD co-authors (if any) as a comma separated list of 2 letter initials.
             example input - ts, ck (for Tony Stark and Clark Kent )
-            Open authors.txt to view the current list of authors for this project.
+            Open $GIT_COCO/authors.txt to view the current list of authors for this project.
             \n[INPUT]: Enter co-author(s) initials: """)
         return coauthors
 

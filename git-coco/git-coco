@@ -52,7 +52,7 @@ def get_commit_coauthors(coauthors_config):
         auto-complete can be used with TAB. Hit ENTER only when you are done adding the coauthors, for selecting the
         co-author use TAB or arrow keys (instead of ENTER).
         example input - TS, SUPERMAN(for Tony Stark and Clark Kent )
-        Open authors.txt to view the current list of authors for this project.\n""")
+        Open $GIT_COCO/authors.txt to view the current list of authors for this project.\n""")
     session = PromptSession(history=FileHistory(coauthors_config['history_file']))
     coauthors = session.prompt('[INPUT]: Enter co-author(s) -',
                                completer=author_prompter.suggestions, complete_while_typing=True,
