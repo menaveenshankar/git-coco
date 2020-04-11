@@ -3,8 +3,6 @@ If you shied away from collaborative coding just because you had to manually add
 then this script will definitely calm your nerves. A simple git hook (in python3) to easily add co-authors to a commit
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
-To get started, all you need is a linux or mac computer with `bash` support.
-
 Main features (TL; DR)-
 * ```git-coco``` instead of ```git commit```
 * Supports **Autcomplete** (keys - TAB, ↑, ↓) which enables you to remember other
@@ -14,9 +12,12 @@ co-author groups hassle free.
 
 Check out the screenshots!
 
+**Requirements** - To get started, all you need is a linux or mac computer with `bash` support. If you prefer other
+shells (like `zsh`) then adapt `setup.sh` accordingly.
+
 # Table of Contents
 * [Setup](#Setup)
-    * [When to skip hooks](#skip-hooks)
+    * [When to skip the triggering of hooks](#skip-hooks)
 * [How to use?](#how-to-use)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
@@ -37,7 +38,7 @@ and you are good to go! Happy collaborative coding :)
 I would recommend adding an alias `alias gco="git-coco"` to your bashrc.
 
 ### Skip hooks
-In the following cases, you should skip using the hook-
+In the following cases, you should skip triggering the hook-
 * `rebase` - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
 ```git commit --amend --no-edit```
 * `cherry-pick` - ```git cherry-pick <hash>``` triggers ```git commit``` by default, which then triggers the hook. Use ```git cherry-pick -n <hash>``` to avoid that.
