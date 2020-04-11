@@ -16,6 +16,7 @@ Check out the screenshots!
 
 # Table of Contents
 * [Setup](#Setup)
+    * [When to skip hooks](#skip-hooks)
 * [How to use](#how-to)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
@@ -32,9 +33,11 @@ git hooks to the git repo where you wanna use them. **This step should be done f
 ```coco.sh``` is in your ```$PATH```, so can be run from anywhere.
 
 and you are good to go! Happy collaborative coding :)
+
 I would recommend adding an alias `alias gco="git-coco"` to your bashrc.
 
-**NOTE** - In the following cases, you should skip using the hook-
+### Skip hooks
+In the following cases, you should skip using the hook-
 * `rebase` - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
 ```git commit --amend --no-edit```
 * `cherry-pick` - ```git cherry-pick <hash>``` triggers ```git commit``` by default, which then triggers the hook. Use ```git cherry-pick -n <hash>``` to avoid that.
