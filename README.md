@@ -17,9 +17,9 @@ shells (like `zsh`) then adapt `setup.sh` accordingly.
 
 # Table of Contents
 * [Setup](#Setup)
-    * [When to skip the triggering of hooks](#skip-hooks)
 * [How to use?](#how-to-use)
     * [Issue number (additional feature)](#issue-number)
+    * [When to skip the triggering of hooks](#skip-hooks)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
 * [Extendable interface for programmers](#extendable-interface)
@@ -38,11 +38,6 @@ and you are good to go! Happy collaborative coding :)
 
 I would recommend adding an alias `alias gco="git-coco"` to your bashrc.
 
-### Skip hooks
-In the following cases, you should skip triggering the hook-
-* `rebase` - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
-```git commit --amend --no-edit```
-* `cherry-pick` - ```git cherry-pick <hash>``` triggers ```git commit``` by default, which then triggers the hook. Use ```git cherry-pick -n <hash>``` to avoid that.
 
 ### Uninstall
 ```coco.sh uninstall <absolute-path-to-your-git-repo>```: removes the git hooks
@@ -73,10 +68,18 @@ Only unique initials can be added. The script takes care of checking if the init
 
 ### Issue number
 If you are using frameworks like jira or codebeamer for tracking tasks, then you can also add the corresponding task/issue number
-to the commit message (check the screenshots). This can be done automatically if you name the branch ending with _issuexxxxx where xxxxx is the task number.
+to the commit message (check the screenshots). This can be done automatically if you **name the branch ending with _issuexxxxx** where xxxxx is the task number.
 *The fundamental principle of this feature is to encourage one branch per issue*.
 However, if your branch name does not contain the issue number then you will be prompted to enter it manually. This feature is an
 example of how to add your own custom messages on top of co-authors (see for [Extendable interface](#extendable-interface) more details). 
+
+### Skip hooks
+In the following cases, you should skip triggering the hook-
+* `rebase` - if you amend a commit message during an interactive rebase then the coauthor prompt will pop up again even if you had added them before. This is intentional. However, if you only change file(s) and do not wish to change the commit message during an amend then use 
+```git commit --amend --no-edit```
+* `cherry-pick` - ```git cherry-pick <hash>``` triggers ```git commit``` by default, which then triggers the hook. Use ```git cherry-pick -n <hash>``` to avoid that.
+
+
 
 ##
 How the final commit message looks like:
