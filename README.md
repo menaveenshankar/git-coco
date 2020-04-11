@@ -17,12 +17,12 @@ Check out the screenshots!
 # Table of Contents
 * [Setup](#Setup)
     * [When to skip hooks](#skip-hooks)
-* [How to use](#how-to)
+* [How to use?](#how-to-use)
 * [Configs](#configs)
 * [Available git tags](#version-tags)
 * [Extendable interface for programmers](#extendable-interface)
-* [Why git-coco](#why-coco)
-    * [Comparison to other co-author tools](#comparison-to)
+* [Why git-coco?](#why-coco)
+    * [Comparison to other co-author tools](#comparison-to-other-coauthor-tools)
 
 ## Setup
 Adapt ```config``` in ```utils.py``` accordingly (see [Configs](#configs)). Then,
@@ -46,7 +46,7 @@ In the following cases, you should skip using the hook-
 ```coco.sh uninstall <absolute-path-to-your-git-repo>```: removes the git hooks
 from the repo.
 
-## How-to
+## How to use
 * ```git-coco``` (**Autocomplete version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action.
  ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
