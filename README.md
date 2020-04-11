@@ -50,7 +50,7 @@ from the repo.
  or their email ids. **Key bindings** - Select using ```TAB``` or ```up-arrow/down-arrow``` key.
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
  
-  **Autosuggest** co-author groups - if a bunch of you repeatedly work together, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
+  **Autosuggest** co-author groups - if a bunch of you work together frequently, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
  of the autosuggest feature based on history to circumvent this. **Key bindings** - Select using ```right-arrow``` key.
  
   e.g. if Batman and Superman work together on multiple commits, then for the next commit you only need to type Batman. The autosuggest feature
@@ -123,6 +123,7 @@ as mentioned in the documenation of ```fill_messages```
 <details>
 <summary>Latest version is always the topmost tag in the following list:</summary>
 
+* **v2,4** - restructured git-coco package, simple setup process
 * **v2.3** - refactor code to have extendable interface for custom message types
 * **v2.2** - autosuggest frequently occuring coauthor groups
 * **v2.1** - single script to install/uninstall git hooks
