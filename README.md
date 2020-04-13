@@ -4,9 +4,9 @@ then this script will definitely calm your nerves. `git-coco` is a simple git ho
 message. It gets triggered automatically as soon as you hit ```git-coco```. **coco** is short for "**co**mmit **co**authors".
 
 Main features (TL; DR)-
-* Run ```git-coco``` instead of ```git commit```
-* Supports **Autcomplete** (keys - TAB, ↑, ↓) which enables you to remember other
-important things instead of author details, and **Autosuggest** (key →) on top of this makes the process of adding repetitive 
+* Run ```git-coco``` instead of ```git commit``` with the same arguments.
+* Supports **Autcomplete** (keys - TAB, ↑, ↓) which relieves you of the mnemonic load of remembering author's
+initials, and **Autosuggest** (key →) on top of this makes the process of adding repetitive 
 co-author groups hassle free.
 * Supports issue/task/item number as part of the commit message.
 
@@ -59,7 +59,7 @@ from the repo.
  ![autosuggest_coauthor_input](screenshots/autosuggest_history.png)
  
 * **Eidetic version**: If you forget to run ```git-coco``` and run ```git commit``` instead, then the autosuggest feature
-will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember all the initials! :D
+will not work. However, you can still add the coauthors using initials only. Its eidetic because you gotta remember all the initials! :smiley:
 ![coauthor_input](screenshots/coauthor_input.png)
 * ```git-add-authors```: to update ```authors.txt``` run ```git-add-authors```. It takes a list of authors
 in the format specified in ```authors.txt```, i.e., ```<author-initials>: <author-full-name>, <author-email-id>```.
@@ -139,7 +139,8 @@ Here are my queries regarding `tty` on [github](https://github.com/prompt-toolki
 [stackoverflow](https://stackoverflow.com/questions/59357934/autocomplete-does-not-work-within-git-hook-tty-problem).
 
 ### Comparison to other coauthor tools:
-* Other co-author tools like `git-mob` and `git-pair` rely exclusively on author initials. The useability becomes an issue as the number
-of authors in the database increase. Autocomplete in git-coco easily addresses this issue.
-* Every commit in `git-coco` can have different set of co-authors which is not supported by `git-mob` and `git-pair`.
+* Other co-author tools like `git-mob` and `git-pair` rely exclusively on author initials. As the number
+of authors in the database increase, usability becomes an issue due to the mnemonic load (of remembering)
+initials. Autocomplete in `git-coco` eliminates this issue. 
+* Each commit in `git-coco` can have different set of co-authors which is not supported by `git-mob` and `git-pair`.
 * `git-coco` is written in python3 and is simple to setup.
