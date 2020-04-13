@@ -36,7 +36,7 @@ git hooks to the git repo where you wanna use them. **This step should be done f
 
 and you are good to go! Happy collaborative coding :)
 
-I would recommend adding an alias `alias gco="git-coco"` to your bashrc.
+I would recommend adding `alias gco="git-coco"` to your bashrc.
 
 
 ### Uninstall
@@ -47,7 +47,7 @@ from the repo.
 * ```git-coco``` (**Autocomplete version**): Run ```git-coco``` or ```git-coco -m "<msg>"``` to see the hook in action.
  ```git-coco``` takes the same arguments as
 ```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
- or their email ids. **Key bindings** - Select using ```TAB``` or ```up-arrow/down-arrow``` key.
+ or their email ids, just type few letters of the respective author(s) for the available options to pop-up. **Key bindings** - Select using ```TAB``` or ```up-arrow/down-arrow``` key.
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
  
   **Autosuggest** co-author groups - if a bunch of you work together frequently, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
