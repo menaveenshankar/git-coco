@@ -1,6 +1,5 @@
 from os import getenv
 from os.path import dirname, exists, join as join_path
-from typing import Dict
 import sys
 
 config = {
@@ -17,11 +16,12 @@ config = {
 }
 
 
-def author_details(authors_details_list) -> Dict[str, str]:
+def author_details(authors_details_list):
+    """returns a dict with keys as author initials and values as author details"""
     return dict([x.split(':') for x in authors_details_list])
 
 
-def read_authors_file(authors_file) -> Dict[str, str]:
+def read_authors_file(authors_file):
     try:
         if not exists(authors_file):  raise IOError
         with open(authors_file, 'r') as f:
