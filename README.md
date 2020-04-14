@@ -33,6 +33,7 @@ to bashrc. Restart your terminal after this step.
 2. ```coco.sh install <absolute-path-to-your-git-repo>``` : this symlinks the 
 git hooks to the git repo where you wanna use them. **This step should be done for each repo where you wanna use the hook.**
 ```coco.sh``` is in your ```$PATH```, so can be run from anywhere.
+3. Add authors you collaborate with using `git-add-authors`.
 
 and you are good to go! Happy collaborative coding :)
 
@@ -49,6 +50,7 @@ from the repo.
 ```git commit```. With ```git-coco``` you can avail the cool autocomplete feature. Input can be either author's initials
  or their email ids, just type few letters of the respective author(s) for the available options to pop-up. Multiple authors
  should be separated by comma. **Key bindings** - Select using ```TAB``` or ```up-arrow/down-arrow``` key.
+ 
  ![autosuggest_coauthor_input](screenshots/autosuggest.png)
  
   **Autosuggest** co-author groups - if a bunch of you work together frequently, then adding the same co-authors repeatedly from scratch is a hassle. You can make use
@@ -124,7 +126,7 @@ as mentioned in the documenation of ```fill_messages```
 <details>
 <summary>Latest version is always the topmost tag in the following list:</summary>
 
-* **v2,4** - restructured git-coco package, simple setup process
+* **v2.4** - restructured git-coco package, simple setup process
 * **v2.3** - refactor code to have extendable interface for custom message types
 * **v2.2** - autosuggest frequently occuring coauthor groups
 * **v2.1** - single script to install/uninstall git hooks
