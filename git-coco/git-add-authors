@@ -26,6 +26,7 @@ def add_new_authors(new_authors, coauthors_config):
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         print('usage: git-add-authors "author-initials: author-name, author-email". Double quotes are important.')
-        print('Multiple authors can be specified at a time. Author initials have to be unique.')
+        print('example - $ git-add-authors "KM: Krishna Mehra, krrish"')
+        print('Multiple authors can be given as arguments. Author initials have to be unique, the script notifies you in the case they are not.')
         exit(1)
     add_new_authors(sys.argv[1:], config['coauthors'])
